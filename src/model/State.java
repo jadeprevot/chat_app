@@ -1,0 +1,8 @@
+package model;
+
+public enum State {
+	AUTHENTICATED,
+	UNAUTHENTICATED,
+	CONNECTED_CANAL,
+	CONNECTED_DIRECT
+}

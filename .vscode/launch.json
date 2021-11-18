@@ -1,0 +1,31 @@
+{
+	// Use IntelliSense to learn about possible attributes.
+	// Hover to view descriptions of existing attributes.
+	// For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+	"version": "0.2.0",
+	"configurations": [
+
+		{
+			"type": "java",
+			"name": "Launch Current File",
+			"request": "launch",
+			"mainClass": "${file}"
+		},
+		{
+			"type": "java",
+			"name": "Launch EchoClient",
+			"request": "launch",
+			"mainClass": "stream.EchoClient",
+			"projectName": "Chat_710b949f",
+			"args": ["127.0.0.1", "12345"]
+		},
+		{
+			"type": "java",
+			"name": "Launch Server",
+			"request": "launch",
+			"mainClass": "stream.Server",
+			"projectName": "Chat_710b949f",
+			"args": ["12345"]
+		}
+	]
+}

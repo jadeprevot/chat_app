@@ -1,19 +1,28 @@
+/***
+ * ClientThread
+ * Example of a TCP server
+ * Date: 14/12/08
+ * Authors:
+ */
+
 package stream;
 
 import model.Canal;
+import model.State;
 import model.User;
 
 import java.io.*;
 import java.net.*;
 
-import static model.State.*;
+import static model.State.AUTHENTICATED;
+import static model.State.CONNECTED_CANAL;
 
 /**
  * Thread qui se charge d'écouter les requetes des clients.
  * */
 public class ClientThread extends Thread {
-    private final Server server;
-    private final Socket clientSocket;
+    private Server server;
+    private Socket clientSocket;
     private BufferedReader in;
     private PrintWriter out;
     private User user;
@@ -63,7 +72,7 @@ public class ClientThread extends Thread {
         return this.user;
     }
 
-    public void quit() {
+    public void disconnect() {
         this.user = new User();
     }
 
@@ -79,20 +88,6 @@ public class ClientThread extends Thread {
 
     public void message(String s) {
         out.println(s);
-    }
-
-    public void connect(ClientThread other) {
-        this.directMessage = other;
-        this.user.setState(CONNECTED_DIRECT);
-    }
-
-    public ClientThread getDirectMessage() {
-        return this.directMessage;
-    }
-
-    public void disconnect() {
-        this.directMessage = null;
-        this.user.setState(AUTHENTICATED);
     }
 }
 
