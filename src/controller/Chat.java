@@ -1,6 +1,6 @@
 package controller;
 
-import stream.EchoClient;
+import stream.client.EchoClient;
 import view.Window;
 
 import java.awt.event.ActionEvent;

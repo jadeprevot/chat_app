@@ -1,6 +1,4 @@
-package stream;
-
-import controller.Server;
+package stream.server;
 
 import java.io.IOException;
 import java.net.InetAddress;
