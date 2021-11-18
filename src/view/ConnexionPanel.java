@@ -32,11 +32,11 @@ public class ConnexionPanel extends JPanel {
 		this.connexion.addActionListener(chat);
 	}
 
-	public JTextField getHostname() {
+	public JTextField getUsername() {
 		return this.username;
 	}
 
-	public JTextField getPort() {
+	public JTextField getPassword() {
 		return this.password;
 	}
 

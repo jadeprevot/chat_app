@@ -21,12 +21,12 @@ public class Server {
         this.serverThread = new ServerThread(this, port);
         this.clientThreadList = new ArrayList<>();
         this.canalList = new ArrayList<>();
+        this.isRunning = Boolean.FALSE;
         this.canalList.add(new Canal("science", "Forum basé sur la science"));
         this.canalList.add(new Canal("nature", "Forum basé sur la nature"));
         this.canalList.add(new Canal("espace", "Forum basé sur l'espace"));
         this.canalList.add(new Canal("technologie", "Forum basé sur la technologie"));
         this.canalList.add(new Canal("people", "Forum basé sur les peoples"));
-        this.isRunning = Boolean.FALSE;
     }
 
     public void start() {
@@ -275,17 +275,6 @@ public class Server {
         }
     }
 
-    public static void main(String[] args) throws IOException {
-        if (args.length != 1) {
-            System.err.println("Usage: java EchoServer <port number>");
-            System.exit(1);
-        }
-
-        int portNumber = Integer.parseInt(args[0]);
-        Server server = new Server(portNumber);
-        server.start();
-    }
-
 	public User getUser(String login) {
 		for (ClientThread ct : this.clientThreadList) {
 			if (ct.getUser().getLogin().equals(login)) {
@@ -303,4 +292,15 @@ public class Server {
 		}
 		return null;
 	}
+
+    public static void main(String[] args) throws IOException {
+        if (args.length != 1) {
+            System.err.println("Usage: java EchoServer <port number>");
+            System.exit(1);
+        }
+
+        int portNumber = Integer.parseInt(args[0]);
+        Server server = new Server(portNumber);
+        server.start();
+    }
 }

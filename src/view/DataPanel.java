@@ -17,4 +17,8 @@ public class DataPanel extends JPanel {
 
 		this.add(this.data);
 	}
+
+	public JTextArea getData() {
+		return this.data;
+	}
 }
