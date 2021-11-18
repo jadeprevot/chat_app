@@ -1,8 +1,10 @@
-package stream;
+package controller;
 
 import model.Canal;
 import model.State;
 import model.User;
+import stream.ClientThread;
+import stream.ServerThread;
 
 import java.io.IOException;
 import java.util.ArrayList;

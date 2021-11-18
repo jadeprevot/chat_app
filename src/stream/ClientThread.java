@@ -1,5 +1,6 @@
 package stream;
 
+import controller.Server;
 import model.Canal;
 import model.User;
 
