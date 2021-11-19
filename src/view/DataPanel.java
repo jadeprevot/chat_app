@@ -9,9 +9,9 @@ public class DataPanel extends JPanel {
 	private JTextArea data;
 
 	public DataPanel(Chat chat) {
-		this.setBackground(Color.BLUE);
+		this.setBackground(new Color(153, 170, 192));
 		this.setVisible(true);
-		this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
+//		this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 
 		this.data = new JTextArea();
 
