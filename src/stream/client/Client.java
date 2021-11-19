@@ -25,7 +25,7 @@ public class Client {
 		String cmd = args[0];
 		switch (cmd) {
 			case "+OK_IDENTIFIER":
-
+				this.getChannels();
 				System.out.println(reply);
 				break;
 			case "+OK_QUITTER":
@@ -33,11 +33,11 @@ public class Client {
 				System.out.println(reply);
 				break;
 			case "+OK_LISTER":
-
+				this.displayChannels(reply);
 				System.out.println(reply);
 				break;
 			case "+OK_REJOINDRE":
-
+				this.getMembers();
 				System.out.println(reply);
 				break;
 			case "SORTIR":
@@ -52,8 +52,8 @@ public class Client {
 
 				System.out.println(reply);
 				break;
-			case "MEMBRES":
-
+			case "+OK_MEMBRES":
+				this.displayMembers(reply);
 				System.out.println(reply);
 				break;
 			case "CONNEXION":
@@ -69,6 +69,31 @@ public class Client {
 		}
 	}
 
+	private void displayMembers(String reply) {
+		reply = reply.substring(reply.indexOf(" ") + 1);
+		String[] members = reply.split(", ");
+		for (String member : members) {
+			this.chat.displayMember(member);
+		}
+	}
+
+	private void getMembers() {
+		this.clientThread.echo("MEMBRES");
+	}
+
+	private void displayChannels(String reply) {
+		reply = reply.substring(reply.indexOf(" ") + 1);
+		String[] split1 = reply.split(", ");
+		for (String s : split1) {
+			String[] split2 = s.split("\\(");
+			this.chat.displayChannel(split2[0]);
+		}
+	}
+
+	private void getChannels() {
+		this.clientThread.echo("LISTER");
+	}
+
 	public void onServerConnected(ClientThread clientThread) {
 	}
 
@@ -81,5 +106,10 @@ public class Client {
 
 	public void connect(String username, String password) {
 		this.clientThread.echo("IDENTIFIER " + username + " " + password);
+	}
+
+	public void selectChannel(String channel) {
+		this.clientThread.echo("SORTIR");
+		this.clientThread.echo("REJOINDRE " + channel);
 	}
 }
