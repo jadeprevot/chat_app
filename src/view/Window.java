@@ -9,6 +9,7 @@ public class Window extends JFrame {
 	private ConnexionPanel connexionPanel;
 	private DataPanel dataPanel;
 	private ChatPanel chatPanel;
+	private ChannelPanel channelPanel;
 
 	public Window(Chat chat) {
 		this.setSize(new Dimension(800, 800));
@@ -16,7 +17,7 @@ public class Window extends JFrame {
 		this.setLocation(new Point(5, 30));
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setTitle("Chat");
-		this.getContentPane().setBackground(Color.YELLOW);
+		this.getContentPane().setBackground(new Color(79, 118, 157));
 		this.getContentPane().setLayout(new BoxLayout(this.getContentPane(), BoxLayout.Y_AXIS));
 
 		this.connexionPanel = new ConnexionPanel(chat);
@@ -39,5 +40,9 @@ public class Window extends JFrame {
 
 	public ChatPanel getChatPanel() {
 		return this.chatPanel;
+	}
+
+	public ChannelPanel getChannelPanel(){
+		return this.channelPanel;
 	}
 }
