@@ -3,6 +3,7 @@ package controller;
 import stream.client.EchoClient;
 import view.Window;
 
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -26,6 +27,11 @@ public class Chat implements ActionListener {
 		}
 		else if (e.getSource() == this.window.getChatPanel().getSend()) {
 
+		}
+		for (JMenu menu : this.window.getChannelPanel().getChannels()){
+			if (e.getSource() == menu){
+
+			}
 		}
 	}
 }

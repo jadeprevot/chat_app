@@ -9,7 +9,7 @@ public class DataPanel extends JPanel {
 	private JTextArea data;
 
 	public DataPanel(Chat chat) {
-		this.setBackground(new Color(153, 170, 192));
+		this.setBackground(new Color(250, 251, 253));
 		this.setVisible(true);
 //		this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 
