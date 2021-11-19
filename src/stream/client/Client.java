@@ -26,35 +26,46 @@ public class Client {
 		switch (cmd) {
 			case "+OK_IDENTIFIER":
 
+				System.out.println(reply);
 				break;
 			case "+OK_QUITTER":
 
+				System.out.println(reply);
 				break;
 			case "+OK_LISTER":
 
+				System.out.println(reply);
 				break;
 			case "+OK_REJOINDRE":
 
+				System.out.println(reply);
 				break;
 			case "SORTIR":
 
+				System.out.println(reply);
 				break;
 			case "NOTIFIER":
 				this.chat.displayReply(reply);
+				System.out.println(reply);
 				break;
 			case "+OK_MESSAGE":
 
+				System.out.println(reply);
 				break;
 			case "MEMBRES":
 
+				System.out.println(reply);
 				break;
 			case "CONNEXION":
 
+				System.out.println(reply);
 				break;
 			case "DECONNEXION":
 
+				System.out.println(reply);
 				break;
 			default:
+				System.out.println(reply);
 		}
 	}
 
