@@ -1,9 +1,17 @@
 package view;
 
+import controller.Chat;
+
 import javax.swing.*;
 import java.awt.*;
 
 public class ChannelPanel extends JPanel {
+
+
+    public ChannelPanel(Chat chat) {
+            this.setBackground(Color.ORANGE);
+    }
+
     public JMenuBar createMenuBar() {
         JMenuBar menuBar = new JMenuBar();
         menuBar.setLayout(new BoxLayout(menuBar, BoxLayout.PAGE_AXIS));

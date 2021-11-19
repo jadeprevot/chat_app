@@ -10,6 +10,7 @@ public class Window extends JFrame {
 	private DataPanel dataPanel;
 	private ChatPanel chatPanel;
 	private ChannelPanel channelPanel;
+	private MemberPanel memberPanel;
 
 	public Window(Chat chat) {
 		this.setSize(new Dimension(800, 800));
@@ -22,10 +23,19 @@ public class Window extends JFrame {
 
 		this.connexionPanel = new ConnexionPanel(chat);
 		this.getContentPane().add(connexionPanel);
+		JPanel panel = new JPanel();
+		panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
+
+		this.channelPanel = new ChannelPanel(chat);
+		panel.add(channelPanel);
 		this.dataPanel = new DataPanel(chat);
-		this.getContentPane().add(dataPanel);
+		panel.add(dataPanel);
+		this.memberPanel = new MemberPanel(chat);
+		panel.add(memberPanel);
+		this.getContentPane().add(panel);
 		this.chatPanel = new ChatPanel(chat);
 		this.getContentPane().add(chatPanel);
+
 
 		this.setVisible(true);
 	}
