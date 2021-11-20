@@ -41,6 +41,11 @@ public class Chat implements ActionListener {
 			System.err.println("Usage: java Client <host name> <port number>");
 			System.exit(1);
 		}
+		for (JMenu menu : this.window.getChannelPanel().getChannels()){
+			if (e.getSource() == menu){
+
+			}
+		}
 
 		String hostName = args[0];
 		int portNumber = Integer.parseInt(args[1]);
