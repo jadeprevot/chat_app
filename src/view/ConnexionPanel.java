@@ -11,7 +11,7 @@ public class ConnexionPanel extends JPanel {
 	private JButton connexion;
 
 	public ConnexionPanel(Chat chat) {
-		this.setBackground(new Color(109, 155, 204));
+		this.setBackground(Color.BLUE);
 		this.setVisible(true);
 		this.setPreferredSize(new Dimension(800, 50));
 		this.setMaximumSize(new Dimension(800, 50));
@@ -32,11 +32,11 @@ public class ConnexionPanel extends JPanel {
 		this.connexion.addActionListener(chat);
 	}
 
-	public JTextField getHostname() {
+	public JTextField getUsername() {
 		return this.username;
 	}
 
-	public JTextField getPort() {
+	public JTextField getPassword() {
 		return this.password;
 	}
 

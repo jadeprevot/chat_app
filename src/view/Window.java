@@ -55,4 +55,8 @@ public class Window extends JFrame {
 	public ChannelPanel getChannelPanel(){
 		return this.channelPanel;
 	}
+
+	public MemberPanel getMemberPanel() {
+		return this.memberPanel;
+	}
 }

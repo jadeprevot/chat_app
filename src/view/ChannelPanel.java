@@ -8,6 +8,30 @@ import java.util.List;
 
 public class ChannelPanel extends JPanel {
     private List<JMenu> channels;
+    private JTextField channel;
+    private  JButton select;
+
+    public ChannelPanel(Chat chat) {
+        this.setBackground(Color.ORANGE);
+        this.setMaximumSize(new Dimension(200, 10000));
+        this.setPreferredSize(new Dimension(200, 10000));
+        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+
+        this.channel = new JTextField();
+        this.add(this.channel);
+        this.select = new JButton("select");
+        this.add(this.select);
+
+        this.select.addActionListener(chat);
+    }
+
+    public JTextField getChannel() {
+        return this.channel;
+    }
+
+    public JButton getSelect() {
+        return this.select;
+    }
 
     public ChannelPanel(Chat chat) {
         this.setBackground(new Color(217, 227, 239));
