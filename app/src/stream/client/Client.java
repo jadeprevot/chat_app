@@ -1,7 +1,6 @@
 package stream.client;
 
 import controller.Chat;
-import stream.server.Server;
 
 import java.io.*;
 import java.net.*;
