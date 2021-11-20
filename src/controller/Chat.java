@@ -3,6 +3,7 @@ package controller;
 import stream.client.Client;
 import view.Window;
 
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
@@ -29,6 +30,10 @@ public class Chat implements ActionListener {
 			String message = this.window.getChatPanel().getMessage().getText();
 			this.client.sendMessage(message);
 		}
+		else if (e.getSource() == this.window.getChannelPanel().getSelect()) {
+			String channel = this.window.getChannelPanel().getChannel().getText();
+			this.client.selectChannel(channel);
+		}
 	}
 
 	public static void main(String[] args) throws IOException {
@@ -45,5 +50,19 @@ public class Chat implements ActionListener {
 
 	public void displayReply(String line) {
 		this.window.getDataPanel().getData().append(line);
+	}
+
+	public void displayChannel(String chanel) {
+		JLabel jLabel = new JLabel(chanel);
+		this.window.getChannelPanel().add(jLabel, 0);
+		this.window.getChannelPanel().repaint();
+		this.window.getChannelPanel().revalidate();
+	}
+
+	public void displayMember(String member) {
+		JLabel jLabel = new JLabel(member);
+		this.window.getMemberPanel().add(jLabel, 0);
+		this.window.getMemberPanel().repaint();
+		this.window.getMemberPanel().revalidate();
 	}
 }

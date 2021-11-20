@@ -11,7 +11,7 @@ public class ConnexionPanel extends JPanel {
 	private JButton connexion;
 
 	public ConnexionPanel(Chat chat) {
-		this.setBackground(new Color(109, 155, 204));
+		this.setBackground(Color.BLUE);
 		this.setVisible(true);
 		this.setPreferredSize(new Dimension(800, 50));
 		this.setMaximumSize(new Dimension(800, 50));
