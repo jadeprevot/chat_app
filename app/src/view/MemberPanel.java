@@ -4,9 +4,11 @@ import controller.Chat;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MemberPanel extends JPanel {
-    private JTextField members;
+    private List<JMenu> memberList;
 
     public MemberPanel(Chat chat) {
         this.setBackground(Color.PINK);
@@ -14,11 +16,9 @@ public class MemberPanel extends JPanel {
         this.setMaximumSize(new Dimension(200, 10000));
         this.setPreferredSize(new Dimension(200, 10000));
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-//        this.setPreferredSize(new Dimension(800, 50));
-//        this.setMaximumSize(new Dimension(800, 50));
 
-        this.members = new JTextField();
+        this.memberList = new ArrayList<>();
 
-        this.add(this.members);
+        this.add(new JLabel("Members:"));
     }
 }
