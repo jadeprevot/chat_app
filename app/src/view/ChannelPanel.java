@@ -4,9 +4,12 @@ import controller.Chat;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ChannelPanel extends JPanel {
-    private JMenuBar channels;
+    private JMenuBar menu;
+    private List<JButton> channels;
     private Chat chat;
 
     public ChannelPanel(Chat chat) {
@@ -15,22 +18,28 @@ public class ChannelPanel extends JPanel {
 
         this.chat = chat;
 
-        this.channels = new JMenuBar();
-        this.channels.setLayout(new GridLayout(0,1));
-        JMenu menu = new JMenu("Channels");
+        this.channels = new ArrayList<>();
+
+        this.menu = new JMenuBar();
+        this.menu.setLayout(new GridLayout(0,1));
+        JButton menu = new JButton("Channels");
         menu.setEnabled(false);
-        this.channels.add(menu);
-        this.add(this.channels);
+        this.menu.add(menu);
+        this.add(this.menu);
     }
 
     public void addChannel(String channel) {
-        JMenu menu = new JMenu(channel);
-        menu.addMenuListener(this.chat);
+        JButton menu = new JButton(channel);
+        menu.addActionListener(this.chat);
         this.channels.add(menu);
-
+        this.menu.add(menu);
     }
 
-    public JMenuBar getChannels() {
-        return channels;
+    public JMenuBar getMenu() {
+        return this.menu;
+    }
+
+    public List<JButton> getChannels() {
+        return this.channels;
     }
 }

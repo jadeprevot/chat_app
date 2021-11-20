@@ -23,49 +23,56 @@ public class Client {
 		String[] args = reply.split(":");
 		String cmd = args[0];
 		switch (cmd) {
-			case "+OK_IDENTIFIER":
+			case "+OK_IDENTIFIER": {
 				this.getChannels();
+				this.getMembers();
+				this.setUser(reply);
 				System.out.println(reply);
 				break;
-			case "+OK_QUITTER":
-
-				System.out.println(reply);
-				break;
-			case "+OK_LISTER":
+			}
+			case "+OK_LISTER": {
 				this.displayChannels(reply);
 				System.out.println(reply);
 				break;
-			case "+OK_REJOINDRE":
+			}
+			case "+OK_REJOINDRE": {
 				this.getMembers();
 				System.out.println(reply);
 				break;
-			case "SORTIR":
-
+			}
+			case "NOTIFIER", "+OK_MESSAGE": {
+				this.displayMessage(reply);
 				System.out.println(reply);
 				break;
-			case "NOTIFIER":
-				this.chat.displayReply(reply);
-				System.out.println(reply);
-				break;
-			case "+OK_MESSAGE":
-
-				System.out.println(reply);
-				break;
-			case "+OK_MEMBRES":
+			}
+			case "+OK_MEMBRES": {
 				this.displayMembers(reply);
 				System.out.println(reply);
 				break;
-			case "CONNEXION":
+			}
+			case "CONNEXION": {
 
 				System.out.println(reply);
 				break;
-			case "DECONNEXION":
-
+			}
+			default: {
 				System.out.println(reply);
-				break;
-			default:
-				System.out.println(reply);
+			}
 		}
+	}
+
+	public void onServerConnected(ClientThread clientThread) {
+	}
+
+	public void onServerDisconnected(ClientThread clientThread) {
+	}
+
+	private void getChannels() {
+		this.clientThread.echo("LISTER");
+	}
+
+	private void getMembers() {
+		this.clientThread.echo("MEMBRES");
 	}
 
 	private void displayMembers(String reply) {
@@ -78,10 +85,6 @@ public class Client {
 		}
 	}
 
-	private void getMembers() {
-		this.clientThread.echo("MEMBRES");
-	}
-
 	private void displayChannels(String reply) {
 		reply = reply.substring(reply.indexOf(" ") + 1);
 		String[] split1 = reply.split(", ");
@@ -91,17 +94,18 @@ public class Client {
 		}
 	}
 
-	private void getChannels() {
-		this.clientThread.echo("LISTER");
-	}
-
-	public void onServerConnected(ClientThread clientThread) {
-	}
-
-	public void onServerDisconnected(ClientThread clientThread) {
+	private void displayMessage(String reply) {
+		String[] data = reply.split(" ");
+		boolean isCannal = data[1].equals("CANNAL") ? true : false;
+		String name = data[2];
+		String user = data[4];
+		data = reply.split("<<");
+		String message = data[1].substring(0, data[1].length() - 2);
+		this.chat.displayMessage(isCannal, name, user, message);
 	}
 
 	public void sendMessage(String message) {
+		System.out.println(message);
 		this.clientThread.echo("MESSAGE " + message);
 	}
 
@@ -119,5 +123,11 @@ public class Client {
 		this.clientThread.echo("SORTIR");
 		this.clientThread.echo("DECONNEXION");
 		this.clientThread.echo("CONNEXION " + member);
+	}
+
+	private void setUser(String reply) {
+		this.chat.blockAuthenticate();
+		String user = reply.split(" ")[1];
+		this.chat.setUser(user);
 	}
 }

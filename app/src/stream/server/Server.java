@@ -79,7 +79,7 @@ public class Server {
                 break;
             case "MESSAGE":
                 try {
-                    String message = request.split(" ", 2)[1];
+                    String message = request.substring(request.indexOf(" "));
                     this.message(clientThread, message);
                 }
                 catch (Exception e) {
@@ -189,25 +189,25 @@ public class Server {
         else if (clientThread.getUser().getState() == State.CONNECTED_CANAL) {
             User user = clientThread.getUser();
             String canalName = user.getCanal().getName();
-
             for (Canal canal : this.canalList) {
                 if (canal.getName().equals(canalName)) {
                     for (User other : canal.getUserList()) {
                         for (ClientThread ct : clientThreadList) {
-                            if (!ct.getUser().equals(other)) {
-                                ct.message("NOTIFIER: " + canalName + " PARLE: " + user.getLogin() + " << " + message + " >>");
-                                clientThread.reply("+OK_MESSAGE");
+                            if (!ct.getUser().equals(other) && ct.getUser().getCanal().getName() == canalName) {
+                                ct.message("NOTIFIER: CANNAL " + canalName + " PARLE: " + user.getLogin() + " << " + message + " >>");
                             }
                         }
                     }
                 }
             }
+            clientThread.reply("+OK_MESSAGE: CANNAL " + canalName + " PARLE: " + user.getLogin() + " << " + message + " >>");
         }
         else if (clientThread.getUser().getState() == State.CONNECTED_DIRECT) {
-            ClientThread other =  clientThread.getDirectMessage();
-            String otherName = other.getUser().getLogin();
-            other.message("NOTIFIER: " + "dm" + " PARLE: " + otherName + " << " + message + " >>");
-            clientThread.reply("+OK_MESSAGE");
+            ClientThread ct =  clientThread.getDirectMessage();
+            String other =  clientThread.getDirectMessage().getUser().getLogin();
+            String name = clientThread.getUser().getLogin();
+            ct.message("NOTIFIER: DM " + other + " PARLE: " + name + " << " + message + " >>");
+            clientThread.reply("+OK_MESSAGE: DM " + other + " PARLE: " + name + " << " + message + " >>");
         }
     }
 
