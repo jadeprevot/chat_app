@@ -45,10 +45,16 @@ public class Chat implements ActionListener, MenuListener {
 	}
 
 	public void displayMember(String member) {
-		JLabel jLabel = new JLabel(member);
-		this.window.getMemberPanel().add(jLabel, 0);
+		this.window.getMemberPanel().addMember(member);
 		this.window.getMemberPanel().repaint();
 		this.window.getMemberPanel().revalidate();
+	}
+
+	public void resetMembers() {
+		this.window.getMemberPanel().getMembers().removeAll();
+		JMenu menu = new JMenu("Members");
+		menu.setEnabled(false);
+		this.window.getMemberPanel().getMembers().add(menu);
 	}
 
 	@Override
@@ -56,6 +62,11 @@ public class Chat implements ActionListener, MenuListener {
 		for (int i = 0; i < this.window.getChannelPanel().getChannels().getMenuCount(); ++i) {
 			if (e.getSource() == this.window.getChannelPanel().getChannels().getMenu(i)) {
 				this.client.selectChannel(this.window.getChannelPanel().getChannels().getMenu(i).getText());
+			}
+		}
+		for (int i = 0; i < this.window.getMemberPanel().getMembers().getMenuCount(); ++i) {
+			if (e.getSource() == this.window.getMemberPanel().getMembers().getMenu(i)) {
+				this.client.selectMember(this.window.getMemberPanel().getMembers().getMenu(i).getText());
 			}
 		}
 	}

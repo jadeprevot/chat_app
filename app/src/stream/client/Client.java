@@ -69,6 +69,8 @@ public class Client {
 	}
 
 	private void displayMembers(String reply) {
+		this.chat.resetMembers();
+
 		reply = reply.substring(reply.indexOf(" ") + 1);
 		String[] members = reply.split(", ");
 		for (String member : members) {
@@ -109,6 +111,13 @@ public class Client {
 
 	public void selectChannel(String channel) {
 		this.clientThread.echo("SORTIR");
+		this.clientThread.echo("DECONNEXION");
 		this.clientThread.echo("REJOINDRE " + channel);
+	}
+
+	public void selectMember(String member) {
+		this.clientThread.echo("SORTIR");
+		this.clientThread.echo("DECONNEXION");
+		this.clientThread.echo("CONNEXION " + member);
 	}
 }

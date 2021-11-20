@@ -8,17 +8,30 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MemberPanel extends JPanel {
-    private List<JMenu> memberList;
+    private JMenuBar members;
+    private Chat chat;
 
     public MemberPanel(Chat chat) {
         this.setBackground(Color.PINK);
-        this.setVisible(true);
-        this.setMaximumSize(new Dimension(200, 10000));
-        this.setPreferredSize(new Dimension(200, 10000));
-        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        this.setLayout(new GridLayout(0,1));
 
-        this.memberList = new ArrayList<>();
+        this.chat = chat;
 
-        this.add(new JLabel("Members:"));
+        this.members = new JMenuBar();
+        this.members.setLayout(new GridLayout(0,1));
+        JMenu menu = new JMenu("Members");
+        menu.setEnabled(false);
+        this.members.add(menu);
+        this.add(this.members);
+    }
+
+    public void addMember(String channel) {
+        JMenu menu = new JMenu(channel);
+        menu.addMenuListener(this.chat);
+        this.members.add(menu);
+    }
+
+    public JMenuBar getMembers() {
+        return members;
     }
 }
