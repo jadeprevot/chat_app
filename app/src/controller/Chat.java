@@ -9,16 +9,18 @@ import javax.swing.event.MenuListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.util.ArrayList;
 
-public class Chat implements ActionListener, MenuListener {
+public class Chat implements ActionListener {
 	private Client client;
 	private Window window;
+	private String user;
 
 	public Chat(String hostname, int port) throws IOException {
 		this.client = new Client(this, hostname, port);
-		this.client.start();
-
 		this.window = new Window(this);
+
+		this.client.start();
 	}
 
 	@Override
@@ -32,10 +34,24 @@ public class Chat implements ActionListener, MenuListener {
 			String message = this.window.getChatPanel().getMessage().getText();
 			this.client.sendMessage(message);
 		}
-	}
-
-	public void displayReply(String line) {
-		this.window.getDataPanel().getData().append(line);
+		else {
+			for (JButton button : this.window.getChannelPanel().getChannels()) {
+				if (e.getSource() == button) {
+					button.setEnabled(false);
+					this.client.selectChannel(button.getText());
+				} else {
+					button.setEnabled(true);
+				}
+			}
+			for (JButton button : this.window.getMemberPanel().getMembers()) {
+				if (e.getSource() == button) {
+					button.setEnabled(false);
+					this.client.selectMember(button.getText());
+				} else if (!button.getText().equals(this.user) && !button.getText().equals("Members")) {
+					button.setEnabled(true);
+				}
+			}
+		}
 	}
 
 	public void displayChannel(String channel) {
@@ -45,29 +61,40 @@ public class Chat implements ActionListener, MenuListener {
 	}
 
 	public void displayMember(String member) {
-		JLabel jLabel = new JLabel(member);
-		this.window.getMemberPanel().add(jLabel, 0);
+		this.window.getMemberPanel().addMember(member, this.user);
 		this.window.getMemberPanel().repaint();
 		this.window.getMemberPanel().revalidate();
 	}
 
-	@Override
-	public void menuSelected(MenuEvent e) {
-		for (int i = 0; i < this.window.getChannelPanel().getChannels().getMenuCount(); ++i) {
-			if (e.getSource() == this.window.getChannelPanel().getChannels().getMenu(i)) {
-				this.client.selectChannel(this.window.getChannelPanel().getChannels().getMenu(i).getText());
-			}
-		}
+	public void displayMessage(boolean isCannal, String name, String user, String message) {
+		JTextArea area = new JTextArea("\n" + user+ ": " + message);
+		area.setWrapStyleWord(true);
+		area.setLineWrap(true);
+
+		this.window.getDataPanel().add(area);
+		this.window.getDataPanel().repaint();
+		this.window.getDataPanel().revalidate();
 	}
 
-	@Override
-	public void menuDeselected(MenuEvent e) {
-
+	public void resetMembers() {
+		this.window.getMemberPanel().getMenu().removeAll();
+		this.window.getMemberPanel().setMembers(new ArrayList<>());
+		JButton menu = new JButton("Members");
+		menu.setEnabled(false);
+		this.window.getMemberPanel().getMenu().add(menu);
+		this.window.getMemberPanel().getMembers().add(menu);
+		this.window.getDataPanel().repaint();
+		this.window.getDataPanel().revalidate();
 	}
 
-	@Override
-	public void menuCanceled(MenuEvent e) {
+	public void blockAuthenticate() {
+		this.window.getConnexionPanel().getUsername().setEnabled(false);
+		this.window.getConnexionPanel().getPassword().setEnabled(false);
+		this.window.getConnexionPanel().getConnexion().setEnabled(false);
+	}
 
+	public void setUser(String user) {
+		this.user = user;
 	}
 
 	public static void main(String[] args) throws IOException {

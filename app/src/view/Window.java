@@ -19,21 +19,28 @@ public class Window extends JFrame {
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setTitle("Chat");
 		this.getContentPane().setBackground(Color.YELLOW);
-		this.getContentPane().setLayout(new BoxLayout(this.getContentPane(), BoxLayout.Y_AXIS));
+		this.getContentPane().setLayout(new BorderLayout());
 
 		this.connexionPanel = new ConnexionPanel(chat);
-		this.getContentPane().add(connexionPanel);
-		JPanel panel = new JPanel();
-		panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
+		this.getContentPane().add(connexionPanel, BorderLayout.NORTH);
+
 		this.channelPanel = new ChannelPanel(chat);
-		panel.add(channelPanel);
+		JScrollPane channelScrollPanel = new JScrollPane(this.channelPanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		channelScrollPanel.getVerticalScrollBar().setUnitIncrement(30);
+		this.getContentPane().add(channelScrollPanel, BorderLayout.WEST);
+
 		this.dataPanel = new DataPanel(chat);
-		panel.add(dataPanel);
+		JScrollPane dataScrollPanel = new JScrollPane(this.dataPanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		dataScrollPanel.getVerticalScrollBar().setUnitIncrement(30);
+		this.getContentPane().add(dataScrollPanel, BorderLayout.CENTER);
+
 		this.memberPanel = new MemberPanel(chat);
-		panel.add(memberPanel);
-		this.getContentPane().add(panel);
+		JScrollPane memberScrollPanel = new JScrollPane(this.memberPanel, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		memberScrollPanel.getVerticalScrollBar().setUnitIncrement(30);
+		this.getContentPane().add(memberScrollPanel, BorderLayout.EAST);
+
 		this.chatPanel = new ChatPanel(chat);
-		this.getContentPane().add(chatPanel);
+		this.getContentPane().add(chatPanel, BorderLayout.SOUTH);
 
 		this.setVisible(true);
 	}
