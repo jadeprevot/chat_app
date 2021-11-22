@@ -6,7 +6,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 /**
- * Thread qui se charge d'écouter les nouvelles requetes de connexions de la part des clients.
+ * Thread qui se charge d'écouter les nouvelles requetes de connexion de la part des clients.
  * */
 public class ServerThread extends Thread {
 	public Server server;

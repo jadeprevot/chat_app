@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * S'occuper de gérer les différentes connexions et permet la communication entre les différents threads.
+ * S'occupe de gérer les différentes connexions et permet la communication entre les différents threads.
  * */
 public class Server {
     private final ServerThread serverThread;
