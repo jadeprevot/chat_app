@@ -1,6 +1,6 @@
-package view;
+package client.view;
 
-import controller.Chat;
+import client.controller.Chat;
 
 import javax.swing.*;
 import java.awt.*;

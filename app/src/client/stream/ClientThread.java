@@ -1,4 +1,6 @@
-package stream.client;
+package client.stream;
+
+import client.Client;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;

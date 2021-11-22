@@ -1,6 +1,7 @@
-package stream.client;
+package client;
 
-import controller.Chat;
+import client.controller.Chat;
+import client.stream.ClientThread;
 
 import java.io.*;
 import java.net.*;

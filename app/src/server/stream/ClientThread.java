@@ -1,12 +1,13 @@
-package stream.server;
+package server.stream;
 
-import model.Canal;
-import model.User;
+import server.model.Canal;
+import server.model.User;
+import server.Server;
 
 import java.io.*;
 import java.net.*;
 
-import static model.State.*;
+import static server.model.State.*;
 
 /**
  * Thread qui se charge d'écouter les requetes des clients.

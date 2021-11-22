@@ -1,4 +1,4 @@
-package model;
+package server.model;
 
 public enum State {
 	AUTHENTICATED,
