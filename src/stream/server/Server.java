@@ -4,6 +4,9 @@ import model.Canal;
 import model.State;
 import model.User;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -153,7 +156,7 @@ public class Server {
                     return;
                 }
             }
-            clientThread.reply("-KO_REJOINDRE: " + "Canal innexistant");
+            clientThread.reply("-KO_REJOINDRE: " + "Canal inexistant");
         }
         else {
             clientThread.reply("-KO_REJOINDRE: " + "Utilisateur non connecté");
@@ -181,7 +184,7 @@ public class Server {
 
     private void message(ClientThread clientThread, String message) {
         if (clientThread.getUser().getState() == State.AUTHENTICATED) {
-            clientThread.reply("-KO_MESSAGE: " + "Utilisateur non connecté à un cannal ou à un utilisateur");
+            clientThread.reply("-KO_MESSAGE: " + "Utilisateur non connecté à un canal ou à un utilisateur");
         }
         else if (clientThread.getUser().getState() == State.UNAUTHENTICATED) {
             clientThread.reply("-KO_MESSAGE: " + "Utilisateur non connecté");
@@ -259,7 +262,7 @@ public class Server {
             clientThread.reply("-KO_CONNEXION: " + "Utilisateur non connecté");
         }
         else if (clientThread.getUser().getState() == State.CONNECTED_CANAL) {
-            clientThread.reply("-KO_CONNEXION: " + "Utilisateur non connecté à un cannal");
+            clientThread.reply("-KO_CONNEXION: " + "Utilisateur non connecté à un canal");
         }
         else if (clientThread.getUser().getState() == State.CONNECTED_DIRECT) {
             clientThread.reply("-KO_CONNEXION: " + "Utilisateur déjà connecté à un autre utilisateur");
@@ -272,6 +275,62 @@ public class Server {
         }
         else {
             clientThread.disconnect();
+        }
+    }
+
+    private void historic(ClientThread clientThread, String message) {
+        if (clientThread.getUser().getState() == State.AUTHENTICATED) {
+            clientThread.reply("-KO_MESSAGE: " + "Utilisateur non connecté à un canal ou à un utilisateur");
+        }
+        else if (clientThread.getUser().getState() == State.UNAUTHENTICATED) {
+            clientThread.reply("-KO_MESSAGE: " + "Utilisateur non connecté");
+        }
+        else if (clientThread.getUser().getState() == State.CONNECTED_CANAL) {
+            User user = clientThread.getUser();
+            String canalName = user.getCanal().getName();
+
+            for (Canal canal : this.canalList) {
+                if (canal.getName().equals(canalName)) {
+                    for (User other : canal.getUserList()) {
+                        for (ClientThread ct : clientThreadList) {
+                            if (!ct.getUser().equals(other)) {
+                                try {
+                                    File file = new File("test.txt");
+                                    if (!file.exists()) {
+                                        file.createNewFile();
+                                    }
+                                    FileWriter fw = new FileWriter(file.getAbsoluteFile());
+                                    BufferedWriter bw = new BufferedWriter(fw);
+                                    bw.write("NOTIFIER: " + canalName + " PARLE: " + user.getLogin() + " << " + message + " >>");
+                                    bw.close();
+                                }
+                                catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                                clientThread.reply("+OK_MESSAGE");
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        else if (clientThread.getUser().getState() == State.CONNECTED_DIRECT) {
+            ClientThread other =  clientThread.getDirectMessage();
+            String otherName = other.getUser().getLogin();
+            try {
+                File file = new File("test.txt");
+                if (!file.exists()) {
+                    file.createNewFile();
+                }
+                FileWriter fw = new FileWriter(file.getAbsoluteFile());
+                BufferedWriter bw = new BufferedWriter(fw);
+                bw.write("NOTIFIER: " + "dm" + " PARLE: " + otherName + " << " + message + " >>");
+                bw.close();
+            }
+            catch (IOException e) {
+                e.printStackTrace();
+            }
+            clientThread.reply("+OK_MESSAGE");
         }
     }
 
