@@ -1,4 +1,7 @@
-package stream.server;
+package server.stream;
+
+import server.Server;
+import server.stream.ClientThread;
 
 import java.io.IOException;
 import java.net.InetAddress;

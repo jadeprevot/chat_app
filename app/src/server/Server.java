@@ -1,10 +1,14 @@
-package stream.server;
+package server;
 
-import model.Canal;
-import model.State;
-import model.User;
+import server.model.Canal;
+import server.model.State;
+import server.model.User;
+import server.stream.ClientThread;
+import server.stream.ServerThread;
 
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,13 +19,15 @@ public class Server {
     private final ServerThread serverThread;
     private final List<ClientThread> clientThreadList;
     private final List<Canal> canalList;
-    public Boolean isRunning;
+    private Boolean isRunning;
+    private String historicFolder;
 
     public Server(Integer port) throws IOException {
         this.serverThread = new ServerThread(this, port);
         this.clientThreadList = new ArrayList<>();
         this.canalList = new ArrayList<>();
         this.isRunning = Boolean.FALSE;
+        this.historicFolder = "app/historic/";
         this.canalList.add(new Canal("science", "Forum basé sur la science"));
         this.canalList.add(new Canal("nature", "Forum basé sur la nature"));
         this.canalList.add(new Canal("espace", "Forum basé sur l'espace"));
@@ -201,6 +207,7 @@ public class Server {
                 }
             }
             clientThread.reply("+OK_MESSAGE: CANNAL " + canalName + " PARLE: " + user.getLogin() + " << " + message + " >>");
+            this.saveCanalMessage(user.getLogin(), canalName, message);
         }
         else if (clientThread.getUser().getState() == State.CONNECTED_DIRECT) {
             ClientThread ct =  clientThread.getDirectMessage();
@@ -208,6 +215,7 @@ public class Server {
             String name = clientThread.getUser().getLogin();
             ct.message("NOTIFIER: DM " + other + " PARLE: " + name + " << " + message + " >>");
             clientThread.reply("+OK_MESSAGE: DM " + other + " PARLE: " + name + " << " + message + " >>");
+            this.saveMessage(name, other, message);
         }
     }
 
@@ -292,6 +300,31 @@ public class Server {
 		}
 		return null;
 	}
+
+
+    private void saveMessage(String name, String other, String message) {
+        String fileName = name.compareTo(other) <= 0 ? name + "-" + other : other + "-" + name;
+        PrintWriter printWriter = null;
+        try {
+            printWriter = new PrintWriter(new FileWriter(this.historicFolder + fileName, true));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        printWriter.println(name + " -> " + other + " : " + message);
+        printWriter.close();
+    }
+
+    private void saveCanalMessage(String name, String canal, String message) {
+        String fileName = canal;
+        PrintWriter printWriter = null;
+        try {
+            printWriter = new PrintWriter(new FileWriter(this.historicFolder + fileName, true));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        printWriter.println(name + " : " + message);
+        printWriter.close();
+    }
 
     public static void main(String[] args) throws IOException {
         if (args.length != 1) {

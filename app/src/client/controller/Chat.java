@@ -1,11 +1,9 @@
-package controller;
+package client.controller;
 
-import stream.client.Client;
-import view.Window;
+import client.Client;
+import client.view.Window;
 
 import javax.swing.*;
-import javax.swing.event.MenuEvent;
-import javax.swing.event.MenuListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
