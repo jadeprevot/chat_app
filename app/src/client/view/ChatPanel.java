@@ -7,7 +7,7 @@ import java.awt.*;
 
 public class ChatPanel extends JPanel {
 	private JTextField message;
-	private JButton send;
+	protected JButton send;
 
 	public ChatPanel(Chat chat) {
 		this.setBackground(Color.RED);

@@ -1,6 +1,6 @@
-package stream.multicast;
+package multicast;
 
-import model.User;
+import server.model.User;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;

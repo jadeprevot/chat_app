@@ -1,12 +1,14 @@
 package client;
 
 import client.controller.Chat;
+import client.observer.Observable;
 import client.stream.ClientThread;
+import client.view.MemberPanel;
 
 import java.io.*;
 import java.net.*;
 
-public class Client {
+public class Client extends Observable {
 	private Chat chat;
 	private ClientThread clientThread;
 
@@ -130,5 +132,9 @@ public class Client {
 		this.chat.blockAuthenticate();
 		String user = reply.split(" ")[1];
 		this.chat.setUser(user);
+	}
+
+	public void addObserver(MemberPanel memberPanel) {
+		super.addObserver(memberPanel);
 	}
 }

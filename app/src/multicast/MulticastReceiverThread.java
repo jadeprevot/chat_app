@@ -1,4 +1,4 @@
-package stream.multicast;
+package multicast;
 
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;

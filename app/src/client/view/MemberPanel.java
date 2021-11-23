@@ -1,13 +1,15 @@
 package client.view;
 
 import client.controller.Chat;
+import client.observer.Observable;
+import client.observer.Observer;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MemberPanel extends JPanel {
+public class MemberPanel extends JPanel implements Observer {
     private JMenuBar menu;
     private List<JButton> members;
     private Chat chat;
@@ -48,5 +50,10 @@ public class MemberPanel extends JPanel {
 
     public void setMembers(List<JButton> members) {
         this.members = members;
+    }
+
+    @Override
+    public void update(Observable observed, Object object) {
+        //TODO
     }
 }
