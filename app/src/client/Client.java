@@ -38,6 +38,7 @@ public class Client {
 			}
 			case "+OK_REJOINDRE": {
 				this.getMembers();
+				this.getMessages(reply);
 				System.out.println(reply);
 				break;
 			}
@@ -53,6 +54,11 @@ public class Client {
 			}
 			case "CONNEXION": {
 
+				System.out.println(reply);
+				break;
+			}
+			case "+OK_HISTORIQUE": {
+				this.displayHistorique(reply);
 				System.out.println(reply);
 				break;
 			}
@@ -74,6 +80,10 @@ public class Client {
 
 	private void getMembers() {
 		this.clientThread.echo("MEMBRES");
+	}
+
+	private void displayHistorique(String reply) {
+		for (String line)
 	}
 
 	private void displayMembers(String reply) {

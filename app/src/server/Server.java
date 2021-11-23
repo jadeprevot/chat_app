@@ -6,9 +6,7 @@ import server.model.User;
 import server.stream.ClientThread;
 import server.stream.ServerThread;
 
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -104,11 +102,45 @@ public class Server {
                     clientThread.reply("-ERR_SYNTAXE");
                 }
                 break;
-            case "DECONNEXION":
+            case "DECONNEXION": {
                 this.disconnect(clientThread);
                 break;
+            }
+            case "HISTORIQUE": {
+                this.historic(clientThread);
+                break;
+            }
             default:
                 clientThread.reply("-ERR_CMDINCONNUE");
+        }
+    }
+
+    private void historic(ClientThread clientThread) {
+        if (clientThread.getUser().getState() == State.AUTHENTICATED) {
+            clientThread.reply("-KO_HISTORIQUE: " + "Utilisateur non connecté à un cannal ou à un utilisateur");
+        }
+        else if (clientThread.getUser().getState() == State.UNAUTHENTICATED) {
+            clientThread.reply("-KO_HISTORIQUE: " + "Utilisateur non connecté");
+        }
+        else if (clientThread.getUser().getState() == State.CONNECTED_CANAL) {
+            File file = new File(this.historicFolder + clientThread.getUser().getCanal().getName());
+            if (file.exists()) {
+                try {
+                    BufferedReader buf = new BufferedReader(new FileReader(file));
+                    String line;
+                    clientThread.reply("+OK_HISTORIQUE");
+                    while ((line = buf.readLine()) != null) {
+                        clientThread.reply(line);
+                    }
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        else if (clientThread.getUser().getState() == State.CONNECTED_DIRECT) {
+
         }
     }
 
@@ -300,7 +332,6 @@ public class Server {
 		}
 		return null;
 	}
-
 
     private void saveMessage(String name, String other, String message) {
         String fileName = name.compareTo(other) <= 0 ? name + "-" + other : other + "-" + name;

@@ -8,6 +8,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Chat implements ActionListener {
 	private Client client;
@@ -65,6 +67,9 @@ public class Chat implements ActionListener {
 	}
 
 	public void displayMessage(boolean isCannal, String name, String user, String message) {
+		this.window.getDataPanel().removeAll();
+		this.window.getDataPanel().addData(isCannal, name, user, message);
+
 		JTextArea area = new JTextArea("\n" + user+ ": " + message);
 		area.setWrapStyleWord(true);
 		area.setLineWrap(true);
@@ -93,6 +98,22 @@ public class Chat implements ActionListener {
 
 	public void setUser(String user) {
 		this.user = user;
+	}
+
+	public void displayMessages(String name) {
+		this.window.getDataPanel().removeAll();
+		HashMap<String, ArrayList<String>> data = this.window.getDataPanel().getData();
+		ArrayList<String> list = data.get(name);
+		if (list != null) {
+			for (String msg : list) {
+				JTextArea area = new JTextArea(msg);
+				area.setWrapStyleWord(true);
+				area.setLineWrap(true);
+				this.window.getDataPanel().add(area);
+			}
+		}
+		this.window.getDataPanel().repaint();
+		this.window.getDataPanel().revalidate();
 	}
 
 	public static void main(String[] args) throws IOException {
