@@ -6,9 +6,7 @@ import server.model.User;
 import server.stream.ClientThread;
 import server.stream.ServerThread;
 
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -121,9 +119,46 @@ public class Server {
                 this.disconnect(clientThread);
                 break;
             }
+            case "HISTORIQUE": {
+                this.historic(clientThread);
+                break;
+            }
             default: {
                 clientThread.reply("-ERR_CMDINCONNUE");
             }
+        }
+    }
+
+    private void historic(ClientThread clientThread) {
+        if (clientThread.getUser().getState() == State.AUTHENTICATED) {
+            clientThread.reply("-KO_MESSAGE: " + "Utilisateur non connecté à un cannal ou à un utilisateur");
+        }
+        else if (clientThread.getUser().getState() == State.UNAUTHENTICATED) {
+            clientThread.reply("-KO_MESSAGE: " + "Utilisateur non connecté");
+        }
+        else if (clientThread.getUser().getState() == State.CONNECTED_CANAL) {
+            String user = clientThread.getUser().getLogin();
+            String canal = clientThread.getUser().getCanal().getName();
+
+            String historic = "";
+
+            File file = new File(this.historicFolder + canal);
+            if (file.exists()) {
+                try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+                    String line;
+                    while ((line = br.readLine()) != null) {
+                        historic += line + " | ";
+                    }
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            clientThread.reply("+OK_HISTORIQUE: " + historic);
+        }
+        else if (clientThread.getUser().getState() == State.CONNECTED_DIRECT) {
         }
     }
 
@@ -298,15 +333,6 @@ public class Server {
         }
     }
 
-	public User getUser(String login) {
-		for (ClientThread ct : this.clientThreadList) {
-			if (ct.getUser().getLogin().equals(login)) {
-				return ct.getUser();
-			}
-		}
-		return null;
-	}
-
 	public ClientThread getClientThread(String login) {
 		for (ClientThread ct : this.clientThreadList) {
 			if (ct.getUser().getLogin().equals(login)) {
@@ -315,7 +341,6 @@ public class Server {
 		}
 		return null;
 	}
-
 
     private void saveMessage(String name, String other, String message) {
         String fileName = name.compareTo(other) <= 0 ? name + "-" + other : other + "-" + name;

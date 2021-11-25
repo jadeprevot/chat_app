@@ -37,6 +37,8 @@ public class Chat implements ActionListener {
 				if (e.getSource() == button) {
 					button.setEnabled(false);
 					this.client.selectChannel(button.getText());
+					this.client.setChannel(button.getText());
+					this.client.getHistoric();
 				} else {
 					button.setEnabled(true);
 				}
@@ -65,11 +67,7 @@ public class Chat implements ActionListener {
 	}
 
 	public void displayMessage(boolean isCannal, String name, String user, String message) {
-		JTextArea area = new JTextArea("\n" + user+ ": " + message);
-		area.setWrapStyleWord(true);
-		area.setLineWrap(true);
-
-		this.window.getDataPanel().add(area);
+		this.window.getDataPanel().addData("\n" + user+ ": " + message);
 		this.window.getDataPanel().repaint();
 		this.window.getDataPanel().revalidate();
 	}
@@ -93,6 +91,10 @@ public class Chat implements ActionListener {
 
 	public void setUser(String user) {
 		this.user = user;
+	}
+
+	public void clearHistoric() {
+		this.window.getDataPanel().getData().setText("");
 	}
 
 	public static void main(String[] args) throws IOException {

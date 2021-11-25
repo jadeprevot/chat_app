@@ -9,6 +9,7 @@ import java.net.*;
 public class Client {
 	private Chat chat;
 	private ClientThread clientThread;
+	private String channel;
 
 	public Client(Chat chat, String hostName, int portNumber) throws IOException {
 		this.chat = chat;
@@ -56,6 +57,11 @@ public class Client {
 				System.out.println(reply);
 				break;
 			}
+			case "+OK_HISTORIQUE": {
+				this.displayHistoric(reply);
+				System.out.println(reply);
+				break;
+			}
 			default: {
 				System.out.println(reply);
 			}
@@ -76,6 +82,10 @@ public class Client {
 		this.clientThread.echo("MEMBRES");
 	}
 
+	public void getHistoric() {
+		this.clientThread.echo("HISTORIQUE");
+	}
+
 	private void displayMembers(String reply) {
 		this.chat.resetMembers();
 
@@ -93,7 +103,7 @@ public class Client {
 			String[] split2 = s.split("\\(");
 			this.chat.displayChannel(split2[0], true);
 		}
-		this.chat.displayChannel("Leave", false);
+//		this.chat.displayChannel("Leave", false);
 	}
 
 	private void displayMessage(String reply) {
@@ -104,6 +114,19 @@ public class Client {
 		data = reply.split("<<");
 		String message = data[1].substring(0, data[1].length() - 2);
 		this.chat.displayMessage(isCannal, name, user, message);
+	}
+
+	private void displayHistoric(String reply) {
+		this.chat.clearHistoric();
+		reply = reply.substring(reply.indexOf(" ") + 1);
+		String[] data = reply.split("\\|");
+		for (String message : data) {
+			if (message.split(" : ").length >= 2) {
+				String name = message.split(" : ")[0];
+				String msg = message.split(" : ")[1];
+				this.chat.displayMessage(true, this.channel, name, msg);
+			}
+		}
 	}
 
 	public void sendMessage(String message) {
@@ -131,5 +154,9 @@ public class Client {
 		this.chat.blockAuthenticate();
 		String user = reply.split(" ")[1];
 		this.chat.setUser(user);
+	}
+
+	public void setChannel(String channel) {
+		this.channel = channel;
 	}
 }
