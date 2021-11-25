@@ -4,8 +4,10 @@ import client.Client;
 import client.view.Window;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyListener;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -32,11 +34,21 @@ public class Chat implements ActionListener {
 			String message = this.window.getChatPanel().getMessage().getText();
 			this.client.sendMessage(message);
 		}
+		else if (e.getSource() == this.window.getMemberPanel().getRefresh()) {
+			this.client.getMembers();
+		}
+		else if (e.getSource() == this.window.getChannelPanel().getLeave()) {
+			this.client.leave();
+			this.clearHistoric();
+		}
 		else {
 			for (JButton button : this.window.getChannelPanel().getChannels()) {
 				if (e.getSource() == button) {
 					button.setEnabled(false);
 					this.client.selectChannel(button.getText());
+					this.client.setChannel(button.getText());
+					this.client.setDm(null);
+					this.client.getHistoric();
 				} else {
 					button.setEnabled(true);
 				}
@@ -44,7 +56,11 @@ public class Chat implements ActionListener {
 			for (JButton button : this.window.getMemberPanel().getMembers()) {
 				if (e.getSource() == button) {
 					button.setEnabled(false);
+					if (button.getBackground().equals(Color.RED)) button.setBackground(null);
 					this.client.selectMember(button.getText());
+					this.client.setChannel(null);
+					this.client.setDm(button.getText());
+					this.client.getHistoric();
 				} else if (!button.getText().equals(this.user) && !button.getText().equals("Members")) {
 					button.setEnabled(true);
 				}
@@ -52,8 +68,8 @@ public class Chat implements ActionListener {
 		}
 	}
 
-	public void displayChannel(String channel) {
-		this.window.getChannelPanel().addChannel(channel);
+	public void displayChannel(String channel, boolean b) {
+		this.window.getChannelPanel().addChannel(channel, b);
 		this.window.getChannelPanel().repaint();
 		this.window.getChannelPanel().revalidate();
 	}
@@ -65,11 +81,7 @@ public class Chat implements ActionListener {
 	}
 
 	public void displayMessage(boolean isCannal, String name, String user, String message) {
-		JTextArea area = new JTextArea("\n" + user+ ": " + message);
-		area.setWrapStyleWord(true);
-		area.setLineWrap(true);
-
-		this.window.getDataPanel().add(area);
+		this.window.getDataPanel().addData("\n" + user+ ": " + message);
 		this.window.getDataPanel().repaint();
 		this.window.getDataPanel().revalidate();
 	}
@@ -78,11 +90,22 @@ public class Chat implements ActionListener {
 		this.window.getMemberPanel().getMenu().removeAll();
 		this.window.getMemberPanel().setMembers(new ArrayList<>());
 		JButton menu = new JButton("Members");
-		menu.setEnabled(false);
+		menu.addActionListener(this);
+		this.window.getMemberPanel().setRefresh(menu);
 		this.window.getMemberPanel().getMenu().add(menu);
-		this.window.getMemberPanel().getMembers().add(menu);
-		this.window.getDataPanel().repaint();
-		this.window.getDataPanel().revalidate();
+		this.window.getMemberPanel().repaint();
+		this.window.getMemberPanel().revalidate();
+	}
+
+	public void resetChannels() {
+		this.window.getChannelPanel().getMenu().removeAll();
+		this.window.getChannelPanel().setChannels(new ArrayList<>());
+		JButton menu = new JButton("Channels");
+		menu.addActionListener(this);
+		this.window.getChannelPanel().setLeave(menu);
+		this.window.getChannelPanel().getMenu().add(menu);
+		this.window.getChannelPanel().repaint();
+		this.window.getChannelPanel().revalidate();
 	}
 
 	public void blockAuthenticate() {
@@ -93,6 +116,18 @@ public class Chat implements ActionListener {
 
 	public void setUser(String user) {
 		this.user = user;
+	}
+
+	public void clearHistoric() {
+		this.window.getDataPanel().getData().setText("");
+	}
+
+	public void popup(String name) {
+		for (JButton button : this.window.getMemberPanel().getMembers()) {
+			if (button.getText().equals(name)) {
+				button.setBackground(Color.RED);
+			}
+		}
 	}
 
 	public static void main(String[] args) throws IOException {

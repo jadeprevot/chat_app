@@ -11,6 +11,7 @@ public class MemberPanel extends JPanel {
     private JMenuBar menu;
     private List<JButton> members;
     private Chat chat;
+    private JButton refresh;
 
     public MemberPanel(Chat chat) {
         this.setBackground(Color.PINK);
@@ -22,9 +23,11 @@ public class MemberPanel extends JPanel {
 
         this.menu = new JMenuBar();
         this.menu.setLayout(new GridLayout(0,1));
-        JButton menu = new JButton("Members");
-        menu.setEnabled(false);
-        this.menu.add(menu);
+
+        this.refresh = new JButton("Members");
+        this.refresh.addActionListener(this.chat);
+        this.menu.add(this.refresh);
+
         this.add(this.menu);
     }
 
@@ -48,5 +51,13 @@ public class MemberPanel extends JPanel {
 
     public void setMembers(List<JButton> members) {
         this.members = members;
+    }
+
+    public JButton getRefresh() {
+        return this.refresh;
+    }
+
+    public void setRefresh(JButton refresh) {
+        this.refresh = refresh;
     }
 }

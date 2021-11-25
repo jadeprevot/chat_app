@@ -6,9 +6,7 @@ import server.model.User;
 import server.stream.ClientThread;
 import server.stream.ServerThread;
 
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,11 +26,19 @@ public class Server {
         this.canalList = new ArrayList<>();
         this.isRunning = Boolean.FALSE;
         this.historicFolder = "app/historic/";
+        this.addCanals();
+    }
+
+    private void addCanals() {
         this.canalList.add(new Canal("science", "Forum basé sur la science"));
         this.canalList.add(new Canal("nature", "Forum basé sur la nature"));
         this.canalList.add(new Canal("espace", "Forum basé sur l'espace"));
         this.canalList.add(new Canal("technologie", "Forum basé sur la technologie"));
         this.canalList.add(new Canal("people", "Forum basé sur les peoples"));
+        this.canalList.add(new Canal("automobile", "Forum basé sur l'automobile"));
+        this.canalList.add(new Canal("vacances", "Forum basé sur les vacances"));
+        this.canalList.add(new Canal("littérature", "Forum basé sur la littérature"));
+        this.canalList.add(new Canal("informatique", "Forum basé sur l'informatique"));
     }
 
     public void start() {
@@ -56,7 +62,7 @@ public class Server {
         String[] args = request.split(" ");
         String cmd = args[0];
         switch (cmd) {
-            case "IDENTIFIER":
+            case "IDENTIFIER": {
                 try {
                     String login = args[1];
                     String password = args[2];
@@ -65,50 +71,116 @@ public class Server {
                     clientThread.reply("-ERR_SYNTAXE");
                 }
                 break;
-            case "QUITTER":
+            }
+            case "QUITTER": {
                 this.quit(clientThread);
                 break;
-            case "LISTER":
+            }
+            case "LISTER": {
                 this.list(clientThread);
                 break;
-            case "REJOINDRE":
+            }
+            case "REJOINDRE": {
                 try {
                     String canalName = args[1];
                     this.join(clientThread, canalName);
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     clientThread.reply("-ERR_SYNTAXE");
                 }
                 break;
-            case "SORTIR":
+            }
+            case "SORTIR": {
                 this.leave(clientThread);
                 break;
-            case "MESSAGE":
+            }
+            case "MESSAGE": {
                 try {
                     String message = request.substring(request.indexOf(" "));
                     this.message(clientThread, message);
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     clientThread.reply("-ERR_SYNTAXE");
                 }
                 break;
-            case "MEMBRES":
+            }
+            case "MEMBRES": {
                 this.members(clientThread);
                 break;
-            case "CONNEXION":
+            }
+            case "CONNEXION": {
                 try {
                     String login = args[1];
                     this.connect(clientThread, login);
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     clientThread.reply("-ERR_SYNTAXE");
                 }
                 break;
-            case "DECONNEXION":
+            }
+            case "DECONNEXION": {
                 this.disconnect(clientThread);
                 break;
-            default:
+            }
+            case "HISTORIQUE": {
+                this.historic(clientThread);
+                break;
+            }
+            default: {
                 clientThread.reply("-ERR_CMDINCONNUE");
+            }
+        }
+    }
+
+    private void historic(ClientThread clientThread) {
+        if (clientThread.getUser().getState() == State.AUTHENTICATED) {
+            clientThread.reply("-KO_MESSAGE: " + "Utilisateur non connecté à un cannal ou à un utilisateur");
+        }
+        else if (clientThread.getUser().getState() == State.UNAUTHENTICATED) {
+            clientThread.reply("-KO_MESSAGE: " + "Utilisateur non connecté");
+        }
+        else if (clientThread.getUser().getState() == State.CONNECTED_CANAL) {
+            String user = clientThread.getUser().getLogin();
+            String canal = clientThread.getUser().getCanal().getName();
+
+            String historic = "";
+
+            File file = new File(this.historicFolder + canal);
+            if (file.exists()) {
+                try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+                    String line;
+                    while ((line = br.readLine()) != null) {
+                        historic += line + " | ";
+                    }
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            clientThread.reply("+OK_HISTORIQUE: " + historic);
+        }
+        else if (clientThread.getUser().getState() == State.CONNECTED_DIRECT) {
+            String name = clientThread.getUser().getLogin();
+            String other = clientThread.getDirectMessage().getUser().getLogin();
+
+            String fileName = name.compareTo(other) <= 0 ? name + "-" + other : other + "-" + name;
+
+            String historic = "";
+
+            File file = new File(this.historicFolder + fileName);
+            if (file.exists()) {
+                try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+                    String line;
+                    while ((line = br.readLine()) != null) {
+                        historic += line + " | ";
+                    }
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            clientThread.reply("+OK_HISTORIQUE: " + historic);
         }
     }
 
@@ -154,7 +226,7 @@ public class Server {
                 if (canal.getName().equals(canalName)) {
                     clientThread.join(canal);
                     User user = clientThread.getUser();
-                    canal.addUser(user);
+                    canal.addUser(clientThread);
                     clientThread.reply("+OK_REJOINDRE: " + user.getCanal().getName());
                     return;
                 }
@@ -168,13 +240,12 @@ public class Server {
 
     private void leave(ClientThread clientThread) {
         if (clientThread.getUser().getState() == State.CONNECTED_CANAL) {
-            User user = clientThread.getUser();
-            String name = user.getCanal().getName();
+            String name = clientThread.getUser().getCanal().getName();
             clientThread.leave();
 
             for (Canal canal : this.canalList) {
                 if (canal.getName().equals(name)) {
-                    canal.removeUser(user);
+                    canal.removeUser(clientThread);
                     clientThread.reply("+OK_SORTIR: " + name);
                     return;
                 }
@@ -197,11 +268,9 @@ public class Server {
             String canalName = user.getCanal().getName();
             for (Canal canal : this.canalList) {
                 if (canal.getName().equals(canalName)) {
-                    for (User other : canal.getUserList()) {
-                        for (ClientThread ct : clientThreadList) {
-                            if (!ct.getUser().equals(other) && ct.getUser().getCanal().getName() == canalName) {
-                                ct.message("NOTIFIER: CANNAL " + canalName + " PARLE: " + user.getLogin() + " << " + message + " >>");
-                            }
+                    for (ClientThread other : canal.getUserList()) {
+                        if (!clientThread.getUser().getLogin().equals(other.getUser().getLogin())) {
+                            other.message("NOTIFIER: CANNAL " + canalName + " PARLE: " + user.getLogin() + " << " + message + " >>");
                         }
                     }
                 }
@@ -213,7 +282,7 @@ public class Server {
             ClientThread ct =  clientThread.getDirectMessage();
             String other =  clientThread.getDirectMessage().getUser().getLogin();
             String name = clientThread.getUser().getLogin();
-            ct.message("NOTIFIER: DM " + other + " PARLE: " + name + " << " + message + " >>");
+            ct.message("NOTIFIER: DM " + name + " PARLE: " + name + " << " + message + " >>");
             clientThread.reply("+OK_MESSAGE: DM " + other + " PARLE: " + name + " << " + message + " >>");
             this.saveMessage(name, other, message);
         }
@@ -238,7 +307,8 @@ public class Server {
             for (Canal canal : this.canalList) {
                 if (canal.getName().equals(canalName)) {
                     String reply = "";
-                    for (User other : canal.getUserList()) {
+                    for (ClientThread ct : canal.getUserList()) {
+                        User other = ct.getUser();
                         reply += other.getLogin() + ", ";
                     }
                     reply = reply.substring(0, reply.length() - 2);
@@ -283,15 +353,6 @@ public class Server {
         }
     }
 
-	public User getUser(String login) {
-		for (ClientThread ct : this.clientThreadList) {
-			if (ct.getUser().getLogin().equals(login)) {
-				return ct.getUser();
-			}
-		}
-		return null;
-	}
-
 	public ClientThread getClientThread(String login) {
 		for (ClientThread ct : this.clientThreadList) {
 			if (ct.getUser().getLogin().equals(login)) {
@@ -301,7 +362,6 @@ public class Server {
 		return null;
 	}
 
-
     private void saveMessage(String name, String other, String message) {
         String fileName = name.compareTo(other) <= 0 ? name + "-" + other : other + "-" + name;
         PrintWriter printWriter = null;
@@ -310,7 +370,7 @@ public class Server {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        printWriter.println(name + " -> " + other + " : " + message);
+        printWriter.println(name + " : " + message);
         printWriter.close();
     }
 

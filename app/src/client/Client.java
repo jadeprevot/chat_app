@@ -9,6 +9,8 @@ import java.net.*;
 public class Client {
 	private Chat chat;
 	private ClientThread clientThread;
+	private String channel;
+	private String dm;
 
 	public Client(Chat chat, String hostName, int portNumber) throws IOException {
 		this.chat = chat;
@@ -56,6 +58,11 @@ public class Client {
 				System.out.println(reply);
 				break;
 			}
+			case "+OK_HISTORIQUE": {
+				this.displayHistoric(reply);
+				System.out.println(reply);
+				break;
+			}
 			default: {
 				System.out.println(reply);
 			}
@@ -72,8 +79,12 @@ public class Client {
 		this.clientThread.echo("LISTER");
 	}
 
-	private void getMembers() {
+	public void getMembers() {
 		this.clientThread.echo("MEMBRES");
+	}
+
+	public void getHistoric() {
+		this.clientThread.echo("HISTORIQUE");
 	}
 
 	private void displayMembers(String reply) {
@@ -87,11 +98,13 @@ public class Client {
 	}
 
 	private void displayChannels(String reply) {
+		this.chat.resetChannels();
+
 		reply = reply.substring(reply.indexOf(" ") + 1);
 		String[] split1 = reply.split(", ");
 		for (String s : split1) {
 			String[] split2 = s.split("\\(");
-			this.chat.displayChannel(split2[0]);
+			this.chat.displayChannel(split2[0], true);
 		}
 	}
 
@@ -100,9 +113,27 @@ public class Client {
 		boolean isCannal = data[1].equals("CANNAL") ? true : false;
 		String name = data[2];
 		String user = data[4];
-		data = reply.split("<<");
-		String message = data[1].substring(0, data[1].length() - 2);
-		this.chat.displayMessage(isCannal, name, user, message);
+		if (isCannal || !isCannal && name.equals(this.dm)) {
+			data = reply.split("<<");
+			String message = data[1].substring(0, data[1].length() - 2);
+			this.chat.displayMessage(isCannal, name, user, message);
+		}
+		else {
+			this.chat.popup(name);
+		}
+	}
+
+	private void displayHistoric(String reply) {
+		this.chat.clearHistoric();
+		reply = reply.substring(reply.indexOf(" ") + 1);
+		String[] data = reply.split("\\|");
+		for (String message : data) {
+			if (message.split(" : ").length >= 2) {
+				String name = message.split(" : ")[0];
+				String msg = message.split(" : ")[1];
+				this.chat.displayMessage(true, this.channel, name, msg);
+			}
+		}
 	}
 
 	public void sendMessage(String message) {
@@ -130,5 +161,20 @@ public class Client {
 		this.chat.blockAuthenticate();
 		String user = reply.split(" ")[1];
 		this.chat.setUser(user);
+	}
+
+	public void setChannel(String channel) {
+		this.channel = channel;
+	}
+
+	public void setDm(String dm) {
+		this.dm = dm;
+	}
+
+	public void leave() {
+		this.clientThread.echo("SORTIR");
+		this.clientThread.echo("DECONNEXION");
+		this.clientThread.echo("LISTER");
+		this.clientThread.echo("MEMBRES");
 	}
 }
