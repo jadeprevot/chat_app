@@ -10,7 +10,7 @@ public class ChatPanel extends JPanel {
 	private JButton send;
 
 	public ChatPanel(Chat chat) {
-		this.setBackground(Color.RED);
+		this.setBackground(new Color(144, 149, 199));
 		this.setVisible(true);
 		this.setPreferredSize(new Dimension(800, 50));
 		this.setMaximumSize(new Dimension(800, 50));
