@@ -4,6 +4,7 @@ import client.Client;
 import client.view.Window;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyListener;
@@ -55,6 +56,7 @@ public class Chat implements ActionListener {
 			for (JButton button : this.window.getMemberPanel().getMembers()) {
 				if (e.getSource() == button) {
 					button.setEnabled(false);
+					if (button.getBackground().equals(Color.RED)) button.setBackground(null);
 					this.client.selectMember(button.getText());
 					this.client.setChannel(null);
 					this.client.setDm(button.getText());
@@ -130,5 +132,13 @@ public class Chat implements ActionListener {
 		int portNumber = Integer.parseInt(args[1]);
 
 		new Chat(hostName, portNumber);
+	}
+
+	public void popup(String name) {
+		for (JButton button : this.window.getMemberPanel().getMembers()) {
+			if (button.getText().equals(name)) {
+				button.setBackground(Color.RED);
+			}
+		}
 	}
 }

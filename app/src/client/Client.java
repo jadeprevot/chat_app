@@ -113,9 +113,14 @@ public class Client {
 		boolean isCannal = data[1].equals("CANNAL") ? true : false;
 		String name = data[2];
 		String user = data[4];
-		data = reply.split("<<");
-		String message = data[1].substring(0, data[1].length() - 2);
-		this.chat.displayMessage(isCannal, name, user, message);
+		if (isCannal || !isCannal && name.equals(this.dm)) {
+			data = reply.split("<<");
+			String message = data[1].substring(0, data[1].length() - 2);
+			this.chat.displayMessage(isCannal, name, user, message);
+		}
+		else {
+			this.chat.popup(name);
+		}
 	}
 
 	private void displayHistoric(String reply) {

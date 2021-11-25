@@ -283,7 +283,7 @@ public class Server {
             ClientThread ct =  clientThread.getDirectMessage();
             String other =  clientThread.getDirectMessage().getUser().getLogin();
             String name = clientThread.getUser().getLogin();
-            ct.message("NOTIFIER: DM " + other + " PARLE: " + name + " << " + message + " >>");
+            ct.message("NOTIFIER: DM " + name + " PARLE: " + name + " << " + message + " >>");
             clientThread.reply("+OK_MESSAGE: DM " + other + " PARLE: " + name + " << " + message + " >>");
             this.saveMessage(name, other, message);
         }
@@ -371,7 +371,7 @@ public class Server {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        printWriter.println(name + " -> " + other + " : " + message);
+        printWriter.println(name + " : " + message);
         printWriter.close();
     }
 
