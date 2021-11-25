@@ -79,7 +79,7 @@ public class Client {
 		this.clientThread.echo("LISTER");
 	}
 
-	private void getMembers() {
+	public void getMembers() {
 		this.clientThread.echo("MEMBRES");
 	}
 
@@ -98,13 +98,14 @@ public class Client {
 	}
 
 	private void displayChannels(String reply) {
+		this.chat.resetChannels();
+
 		reply = reply.substring(reply.indexOf(" ") + 1);
 		String[] split1 = reply.split(", ");
 		for (String s : split1) {
 			String[] split2 = s.split("\\(");
 			this.chat.displayChannel(split2[0], true);
 		}
-//		this.chat.displayChannel("Leave", false);
 	}
 
 	private void displayMessage(String reply) {
@@ -163,5 +164,12 @@ public class Client {
 
 	public void setDm(String dm) {
 		this.dm = dm;
+	}
+
+	public void leave() {
+		this.clientThread.echo("SORTIR");
+		this.clientThread.echo("DECONNEXION");
+		this.clientThread.echo("LISTER");
+		this.clientThread.echo("MEMBRES");
 	}
 }

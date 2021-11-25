@@ -11,6 +11,7 @@ public class ChannelPanel extends JPanel {
     private JMenuBar menu;
     private List<JButton> channels;
     private Chat chat;
+    private JButton leave;
 
     public ChannelPanel(Chat chat) {
         this.setBackground(Color.ORANGE);
@@ -22,9 +23,11 @@ public class ChannelPanel extends JPanel {
 
         this.menu = new JMenuBar();
         this.menu.setLayout(new GridLayout(0,1));
-        JButton menuChannels = new JButton("Channels");
-        menuChannels.setEnabled(false);
-        this.menu.add(menuChannels);
+
+        this.leave = new JButton("Channels");
+        this.leave.addActionListener(this.chat);
+        this.menu.add(this.leave);
+
         this.add(this.menu);
     }
 
@@ -38,5 +41,21 @@ public class ChannelPanel extends JPanel {
 
     public List<JButton> getChannels() {
         return this.channels;
+    }
+
+    public JButton getLeave() {
+        return this.leave;
+    }
+
+    public JMenuBar getMenu() {
+        return this.menu;
+    }
+
+    public void setChannels(List<JButton> channels) {
+        this.channels = channels;
+    }
+
+    public void setLeave(JButton leave) {
+        this.leave = leave;
     }
 }

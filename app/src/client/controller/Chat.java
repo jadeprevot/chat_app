@@ -6,6 +6,7 @@ import client.view.Window;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyListener;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -31,6 +32,13 @@ public class Chat implements ActionListener {
 		else if (e.getSource() == this.window.getChatPanel().getSend()) {
 			String message = this.window.getChatPanel().getMessage().getText();
 			this.client.sendMessage(message);
+		}
+		else if (e.getSource() == this.window.getMemberPanel().getRefresh()) {
+			this.client.getMembers();
+		}
+		else if (e.getSource() == this.window.getChannelPanel().getLeave()) {
+			this.client.leave();
+			this.clearHistoric();
 		}
 		else {
 			for (JButton button : this.window.getChannelPanel().getChannels()) {
@@ -80,11 +88,22 @@ public class Chat implements ActionListener {
 		this.window.getMemberPanel().getMenu().removeAll();
 		this.window.getMemberPanel().setMembers(new ArrayList<>());
 		JButton menu = new JButton("Members");
-		menu.setEnabled(false);
+		menu.addActionListener(this);
+		this.window.getMemberPanel().setRefresh(menu);
 		this.window.getMemberPanel().getMenu().add(menu);
-		this.window.getMemberPanel().getMembers().add(menu);
-		this.window.getDataPanel().repaint();
-		this.window.getDataPanel().revalidate();
+		this.window.getMemberPanel().repaint();
+		this.window.getMemberPanel().revalidate();
+	}
+
+	public void resetChannels() {
+		this.window.getChannelPanel().getMenu().removeAll();
+		this.window.getChannelPanel().setChannels(new ArrayList<>());
+		JButton menu = new JButton("Channels");
+		menu.addActionListener(this);
+		this.window.getChannelPanel().setLeave(menu);
+		this.window.getChannelPanel().getMenu().add(menu);
+		this.window.getChannelPanel().repaint();
+		this.window.getChannelPanel().revalidate();
 	}
 
 	public void blockAuthenticate() {
