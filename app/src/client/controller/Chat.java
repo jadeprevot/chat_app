@@ -20,9 +20,9 @@ public class Chat implements ActionListener {
 	private String user;
 
 	/**
-	 *
-	 * @param hostname
-	 * @param port
+	 * Constructs a user interface
+	 * @param hostname : Hostname of the server
+	 * @param port : Port we connect to
 	 * @throws IOException
 	 */
 	public Chat(String hostname, int port) throws IOException {
@@ -32,6 +32,10 @@ public class Chat implements ActionListener {
 		this.client.start();
 	}
 
+	/**
+	 * Describes the actions we can do in the app
+	 * @param e : Action currently done
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == this.window.getConnexionPanel().getConnexion()) {
@@ -86,24 +90,43 @@ public class Chat implements ActionListener {
 		}
 	}
 
+	/**
+	 * Displays the channels of the app
+	 * @param channel : Channel currently displayed
+	 * @param b : Tells if the channel is available or not
+	 */
 	public void displayChannel(String channel, boolean b) {
 		this.window.getChannelPanel().addChannel(channel, b);
 		this.window.getChannelPanel().repaint();
 		this.window.getChannelPanel().revalidate();
 	}
 
+	/**
+	 * Displays the members who are connected to the app
+	 * @param member : Member currently displayed
+	 */
 	public void displayMember(String member) {
 		this.window.getMemberPanel().addMember(member, this.user);
 		this.window.getMemberPanel().repaint();
 		this.window.getMemberPanel().revalidate();
 	}
 
+	/**
+	 * Displays the messages sent by the members in the chat
+	 * @param isCannal : //TODO
+	 * @param name : //TODO
+	 * @param user : User who sent the message
+	 * @param message : Content of the message
+	 */
 	public void displayMessage(boolean isCannal, String name, String user, String message) {
 		this.window.getDataPanel().addData("\n" + user+ ": " + message);
 		this.window.getDataPanel().repaint();
 		this.window.getDataPanel().revalidate();
 	}
 
+	/**
+	 * Updates the list of members connected
+	 */
 	public void resetMembers() {
 		this.window.getMemberPanel().getMenu().removeAll();
 		this.window.getMemberPanel().setMembers(new ArrayList<>());
@@ -115,6 +138,9 @@ public class Chat implements ActionListener {
 		this.window.getMemberPanel().revalidate();
 	}
 
+	/**
+	 * Updates the list of channels available
+	 */
 	public void resetChannels() {
 		this.window.getChannelPanel().getMenu().removeAll();
 		this.window.getChannelPanel().setChannels(new ArrayList<>());
@@ -133,20 +159,34 @@ public class Chat implements ActionListener {
 		this.window.getChannelPanel().revalidate();
 	}
 
+	/**
+	 * //TODO
+	 */
 	public void blockAuthenticate() {
 		this.window.getConnexionPanel().getUsername().setEnabled(false);
 		this.window.getConnexionPanel().getPassword().setEnabled(false);
 		this.window.getConnexionPanel().getConnexion().setEnabled(false);
 	}
 
+	/**
+	 * Sets the user
+	 * @param user : User selected
+	 */
 	public void setUser(String user) {
 		this.user = user;
 	}
 
+	/**
+	 * Reinitializes the historic
+	 */
 	public void clearHistoric() {
 		this.window.getDataPanel().getData().setText("");
 	}
 
+	/**
+	 * Notifies the user if they receive a message from another one
+	 * @param name : The name of the sender.
+	 */
 	public void popup(String name) {
 		for (JButton button : this.window.getMemberPanel().getMembers()) {
 			if (button.getText().equals(name)) {
