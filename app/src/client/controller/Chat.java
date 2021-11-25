@@ -52,8 +52,8 @@ public class Chat implements ActionListener {
 		}
 	}
 
-	public void displayChannel(String channel) {
-		this.window.getChannelPanel().addChannel(channel);
+	public void displayChannel(String channel, boolean b) {
+		this.window.getChannelPanel().addChannel(channel, b);
 		this.window.getChannelPanel().repaint();
 		this.window.getChannelPanel().revalidate();
 	}

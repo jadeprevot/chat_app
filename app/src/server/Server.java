@@ -28,11 +28,19 @@ public class Server {
         this.canalList = new ArrayList<>();
         this.isRunning = Boolean.FALSE;
         this.historicFolder = "app/historic/";
+        this.addCanals();
+    }
+
+    private void addCanals() {
         this.canalList.add(new Canal("science", "Forum basé sur la science"));
         this.canalList.add(new Canal("nature", "Forum basé sur la nature"));
         this.canalList.add(new Canal("espace", "Forum basé sur l'espace"));
         this.canalList.add(new Canal("technologie", "Forum basé sur la technologie"));
         this.canalList.add(new Canal("people", "Forum basé sur les peoples"));
+        this.canalList.add(new Canal("automobile", "Forum basé sur l'automobile"));
+        this.canalList.add(new Canal("vacances", "Forum basé sur les vacances"));
+        this.canalList.add(new Canal("littérature", "Forum basé sur la littérature"));
+        this.canalList.add(new Canal("informatique", "Forum basé sur l'informatique"));
     }
 
     public void start() {
@@ -56,7 +64,7 @@ public class Server {
         String[] args = request.split(" ");
         String cmd = args[0];
         switch (cmd) {
-            case "IDENTIFIER":
+            case "IDENTIFIER": {
                 try {
                     String login = args[1];
                     String password = args[2];
@@ -65,50 +73,57 @@ public class Server {
                     clientThread.reply("-ERR_SYNTAXE");
                 }
                 break;
-            case "QUITTER":
+            }
+            case "QUITTER": {
                 this.quit(clientThread);
                 break;
-            case "LISTER":
+            }
+            case "LISTER": {
                 this.list(clientThread);
                 break;
-            case "REJOINDRE":
+            }
+            case "REJOINDRE": {
                 try {
                     String canalName = args[1];
                     this.join(clientThread, canalName);
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     clientThread.reply("-ERR_SYNTAXE");
                 }
                 break;
-            case "SORTIR":
+            }
+            case "SORTIR": {
                 this.leave(clientThread);
                 break;
-            case "MESSAGE":
+            }
+            case "MESSAGE": {
                 try {
                     String message = request.substring(request.indexOf(" "));
                     this.message(clientThread, message);
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     clientThread.reply("-ERR_SYNTAXE");
                 }
                 break;
-            case "MEMBRES":
+            }
+            case "MEMBRES": {
                 this.members(clientThread);
                 break;
-            case "CONNEXION":
+            }
+            case "CONNEXION": {
                 try {
                     String login = args[1];
                     this.connect(clientThread, login);
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     clientThread.reply("-ERR_SYNTAXE");
                 }
                 break;
-            case "DECONNEXION":
+            }
+            case "DECONNEXION": {
                 this.disconnect(clientThread);
                 break;
-            default:
+            }
+            default: {
                 clientThread.reply("-ERR_CMDINCONNUE");
+            }
         }
     }
 

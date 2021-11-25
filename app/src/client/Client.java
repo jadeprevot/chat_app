@@ -91,8 +91,9 @@ public class Client {
 		String[] split1 = reply.split(", ");
 		for (String s : split1) {
 			String[] split2 = s.split("\\(");
-			this.chat.displayChannel(split2[0]);
+			this.chat.displayChannel(split2[0], true);
 		}
+		this.chat.displayChannel("Leave", false);
 	}
 
 	private void displayMessage(String reply) {

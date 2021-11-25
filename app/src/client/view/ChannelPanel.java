@@ -22,21 +22,18 @@ public class ChannelPanel extends JPanel {
 
         this.menu = new JMenuBar();
         this.menu.setLayout(new GridLayout(0,1));
-        JButton menu = new JButton("Channels");
-        menu.setEnabled(false);
-        this.menu.add(menu);
+        JButton menuChannels = new JButton("Channels");
+        menuChannels.setEnabled(false);
+        this.menu.add(menuChannels);
         this.add(this.menu);
     }
 
-    public void addChannel(String channel) {
+    public void addChannel(String channel, boolean b) {
         JButton menu = new JButton(channel);
+        menu.setEnabled(b);
         menu.addActionListener(this.chat);
         this.channels.add(menu);
         this.menu.add(menu);
-    }
-
-    public JMenuBar getMenu() {
-        return this.menu;
     }
 
     public List<JButton> getChannels() {
