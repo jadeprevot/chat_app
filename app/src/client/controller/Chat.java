@@ -118,17 +118,21 @@ public class Chat implements ActionListener {
 	public void resetChannels() {
 		this.window.getChannelPanel().getMenu().removeAll();
 		this.window.getChannelPanel().setChannels(new ArrayList<>());
+
 		JButton menu = new JButton("Channels");
-		JButton create = new JButton("+ Add");
-		JTextField input = new JTextField();
 		menu.addActionListener(this);
-		create.addActionListener(this);
 		this.window.getChannelPanel().setLeave(menu);
 		this.window.getChannelPanel().getMenu().add(menu);
+
+		JButton create = new JButton("+ Add");
+		create.addActionListener(this);
 		this.window.getChannelPanel().setCreate(create);
 		this.window.getChannelPanel().getMenu().add(create);
+
+		JTextField input = new JTextField();
 		this.window.getChannelPanel().setInput(input);
 		this.window.getChannelPanel().getMenu().add(input);
+
 		this.window.getChannelPanel().repaint();
 		this.window.getChannelPanel().revalidate();
 	}

@@ -29,6 +29,7 @@ public class ChannelPanel extends JPanel {
         this.leave = new JButton("Channels");
         this.leave.addActionListener(this.chat);
         this.menu.add(this.leave);
+
         this.add(this.menu);
     }
 
@@ -48,9 +49,13 @@ public class ChannelPanel extends JPanel {
         return this.leave;
     }
 
-    public JButton getCreate() { return this.create; }
+    public JButton getCreate() {
+        return this.create;
+    }
 
-    public JTextField getInput() { return this.input; }
+    public JTextField getInput() {
+        return this.input;
+    }
 
     public JMenuBar getMenu() {
         return this.menu;
