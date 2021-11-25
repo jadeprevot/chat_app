@@ -1,5 +1,7 @@
 package server.model;
 
+import server.stream.ClientThread;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -7,7 +9,7 @@ import java.util.Objects;
 public class Canal {
 	private final String name;
 	private final String topic;
-	private final List<User> userList;
+	private final List<ClientThread> userList;
 
 	public Canal(String name, String topic) {
 		this.name = name;
@@ -23,11 +25,11 @@ public class Canal {
 		return this.topic;
 	}
 
-	public List<User> getUserList() {
+	public List<ClientThread> getUserList() {
 		return this.userList;
 	}
 
-	public void addUser(User user) {
+	public void addUser(ClientThread user) {
 		this.userList.add(user);
 	}
 

@@ -204,7 +204,7 @@ public class Server {
                 if (canal.getName().equals(canalName)) {
                     clientThread.join(canal);
                     User user = clientThread.getUser();
-                    canal.addUser(user);
+                    canal.addUser(clientThread);
                     clientThread.reply("+OK_REJOINDRE: " + user.getCanal().getName());
                     return;
                 }
@@ -247,11 +247,9 @@ public class Server {
             String canalName = user.getCanal().getName();
             for (Canal canal : this.canalList) {
                 if (canal.getName().equals(canalName)) {
-                    for (User other : canal.getUserList()) {
-                        for (ClientThread ct : clientThreadList) {
-                            if (!ct.getUser().equals(other) && ct.getUser().getCanal().getName() == canalName) {
-                                ct.message("NOTIFIER: CANNAL " + canalName + " PARLE: " + user.getLogin() + " << " + message + " >>");
-                            }
+                    for (ClientThread other : canal.getUserList()) {
+                        if (!clientThread.getUser().getLogin().equals(other.getUser().getLogin())) {
+                            other.message("NOTIFIER: CANNAL " + canalName + " PARLE: " + user.getLogin() + " << " + message + " >>");
                         }
                     }
                 }
@@ -288,7 +286,8 @@ public class Server {
             for (Canal canal : this.canalList) {
                 if (canal.getName().equals(canalName)) {
                     String reply = "";
-                    for (User other : canal.getUserList()) {
+                    for (ClientThread ct : canal.getUserList()) {
+                        User other = ct.getUser();
                         reply += other.getLogin() + ", ";
                     }
                     reply = reply.substring(0, reply.length() - 2);
