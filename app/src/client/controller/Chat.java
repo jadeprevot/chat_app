@@ -38,6 +38,7 @@ public class Chat implements ActionListener {
 					button.setEnabled(false);
 					this.client.selectChannel(button.getText());
 					this.client.setChannel(button.getText());
+					this.client.setDm(null);
 					this.client.getHistoric();
 				} else {
 					button.setEnabled(true);
@@ -47,6 +48,9 @@ public class Chat implements ActionListener {
 				if (e.getSource() == button) {
 					button.setEnabled(false);
 					this.client.selectMember(button.getText());
+					this.client.setChannel(null);
+					this.client.setDm(button.getText());
+					this.client.getHistoric();
 				} else if (!button.getText().equals(this.user) && !button.getText().equals("Members")) {
 					button.setEnabled(true);
 				}

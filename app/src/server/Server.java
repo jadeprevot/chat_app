@@ -159,6 +159,28 @@ public class Server {
             clientThread.reply("+OK_HISTORIQUE: " + historic);
         }
         else if (clientThread.getUser().getState() == State.CONNECTED_DIRECT) {
+            String name = clientThread.getUser().getLogin();
+            String other = clientThread.getDirectMessage().getUser().getLogin();
+
+            String fileName = name.compareTo(other) <= 0 ? name + "-" + other : other + "-" + name;
+
+            String historic = "";
+
+            File file = new File(this.historicFolder + fileName);
+            if (file.exists()) {
+                try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+                    String line;
+                    while ((line = br.readLine()) != null) {
+                        historic += line + " | ";
+                    }
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            clientThread.reply("+OK_HISTORIQUE: " + historic);
         }
     }
 

@@ -10,6 +10,7 @@ public class Client {
 	private Chat chat;
 	private ClientThread clientThread;
 	private String channel;
+	private String dm;
 
 	public Client(Chat chat, String hostName, int portNumber) throws IOException {
 		this.chat = chat;
@@ -158,5 +159,9 @@ public class Client {
 
 	public void setChannel(String channel) {
 		this.channel = channel;
+	}
+
+	public void setDm(String dm) {
+		this.dm = dm;
 	}
 }
