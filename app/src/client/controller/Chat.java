@@ -11,11 +11,20 @@ import java.awt.event.KeyListener;
 import java.io.IOException;
 import java.util.ArrayList;
 
+/**
+ * Implements the user interface
+ */
 public class Chat implements ActionListener {
 	private Client client;
 	private Window window;
 	private String user;
 
+	/**
+	 *
+	 * @param hostname
+	 * @param port
+	 * @throws IOException
+	 */
 	public Chat(String hostname, int port) throws IOException {
 		this.client = new Client(this, hostname, port);
 		this.window = new Window(this);
@@ -40,6 +49,15 @@ public class Chat implements ActionListener {
 		else if (e.getSource() == this.window.getChannelPanel().getLeave()) {
 			this.client.leave();
 			this.clearHistoric();
+		}
+		else if (e.getSource() == this.window.getChannelPanel().getCreate()) {
+			String input = this.window.getChannelPanel().getInput().getText();
+			if (!input.equals("")) {
+				this.client.selectChannel(input);
+				this.client.setChannel(input);
+				this.client.setDm(null);
+				this.client.getHistoric();
+			}
 		}
 		else {
 			for (JButton button : this.window.getChannelPanel().getChannels()) {
@@ -100,10 +118,21 @@ public class Chat implements ActionListener {
 	public void resetChannels() {
 		this.window.getChannelPanel().getMenu().removeAll();
 		this.window.getChannelPanel().setChannels(new ArrayList<>());
+
 		JButton menu = new JButton("Channels");
 		menu.addActionListener(this);
 		this.window.getChannelPanel().setLeave(menu);
 		this.window.getChannelPanel().getMenu().add(menu);
+
+		JButton create = new JButton("+ Add");
+		create.addActionListener(this);
+		this.window.getChannelPanel().setCreate(create);
+		this.window.getChannelPanel().getMenu().add(create);
+
+		JTextField input = new JTextField();
+		this.window.getChannelPanel().setInput(input);
+		this.window.getChannelPanel().getMenu().add(input);
+
 		this.window.getChannelPanel().repaint();
 		this.window.getChannelPanel().revalidate();
 	}
