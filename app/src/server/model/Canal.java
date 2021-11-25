@@ -33,7 +33,7 @@ public class Canal {
 		this.userList.add(user);
 	}
 
-	public void removeUser(User user) {
+	public void removeUser(ClientThread user) {
 		this.userList.remove(user);
 	}
 

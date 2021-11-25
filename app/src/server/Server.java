@@ -240,13 +240,12 @@ public class Server {
 
     private void leave(ClientThread clientThread) {
         if (clientThread.getUser().getState() == State.CONNECTED_CANAL) {
-            User user = clientThread.getUser();
-            String name = user.getCanal().getName();
+            String name = clientThread.getUser().getCanal().getName();
             clientThread.leave();
 
             for (Canal canal : this.canalList) {
                 if (canal.getName().equals(name)) {
-                    canal.removeUser(user);
+                    canal.removeUser(clientThread);
                     clientThread.reply("+OK_SORTIR: " + name);
                     return;
                 }

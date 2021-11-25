@@ -122,6 +122,14 @@ public class Chat implements ActionListener {
 		this.window.getDataPanel().getData().setText("");
 	}
 
+	public void popup(String name) {
+		for (JButton button : this.window.getMemberPanel().getMembers()) {
+			if (button.getText().equals(name)) {
+				button.setBackground(Color.RED);
+			}
+		}
+	}
+
 	public static void main(String[] args) throws IOException {
 		if (args.length != 2) {
 			System.err.println("Usage: java Client <host name> <port number>");
@@ -132,13 +140,5 @@ public class Chat implements ActionListener {
 		int portNumber = Integer.parseInt(args[1]);
 
 		new Chat(hostName, portNumber);
-	}
-
-	public void popup(String name) {
-		for (JButton button : this.window.getMemberPanel().getMembers()) {
-			if (button.getText().equals(name)) {
-				button.setBackground(Color.RED);
-			}
-		}
 	}
 }
