@@ -12,6 +12,8 @@ public class ChannelPanel extends JPanel {
     private List<JButton> channels;
     private Chat chat;
     private JButton leave;
+    private JButton create;
+    private JTextField input;
 
     public ChannelPanel(Chat chat) {
         this.setBackground(Color.ORANGE);
@@ -27,7 +29,6 @@ public class ChannelPanel extends JPanel {
         this.leave = new JButton("Channels");
         this.leave.addActionListener(this.chat);
         this.menu.add(this.leave);
-
         this.add(this.menu);
     }
 
@@ -47,6 +48,10 @@ public class ChannelPanel extends JPanel {
         return this.leave;
     }
 
+    public JButton getCreate() { return this.create; }
+
+    public JTextField getInput() { return this.input; }
+
     public JMenuBar getMenu() {
         return this.menu;
     }
@@ -57,5 +62,13 @@ public class ChannelPanel extends JPanel {
 
     public void setLeave(JButton leave) {
         this.leave = leave;
+    }
+
+    public void setCreate(JButton create) {
+        this.create = create;
+    }
+
+    public void setInput(JTextField input) {
+        this.input = input;
     }
 }

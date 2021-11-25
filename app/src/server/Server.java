@@ -231,7 +231,12 @@ public class Server {
                     return;
                 }
             }
-            clientThread.reply("-KO_REJOINDRE: " + "Canal innexistant");
+            Canal canal = new Canal(canalName, "");
+            this.canalList.add(canal);
+            clientThread.join(canal);
+            User user = clientThread.getUser();
+            canal.addUser(clientThread);
+            clientThread.reply("+OK_REJOINDRE: " + user.getCanal().getName());
         }
         else {
             clientThread.reply("-KO_REJOINDRE: " + "Utilisateur non connecté");
