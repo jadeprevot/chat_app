@@ -39,6 +39,21 @@ public class Server {
         this.canalList.add(new Canal("vacances", "Forum basé sur les vacances"));
         this.canalList.add(new Canal("littérature", "Forum basé sur la littérature"));
         this.canalList.add(new Canal("informatique", "Forum basé sur l'informatique"));
+
+        File f = new File(this.historicFolder);
+        String[] pathnames = f.list();
+        for (String pathname : pathnames) {
+            if (!pathname.contains("-") && !this.canalContains(pathname)) {
+                this.canalList.add(new Canal(pathname, ""));
+            }
+        }
+    }
+
+    private boolean canalContains(String pathname) {
+        for (Canal canal : this.canalList) {
+            if (canal.getName().equals(pathname)) return true;
+        }
+        return false;
     }
 
     public void start() {
