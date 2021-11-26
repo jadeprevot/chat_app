@@ -53,27 +53,27 @@ public class Server {
      * Add a channel to the list of cannals of the server.
      */
     private void addCanals() {
-        this.canalList.add(new Canal("science", "Forum basé sur la science"));
-        this.canalList.add(new Canal("nature", "Forum basé sur la nature"));
-        this.canalList.add(new Canal("espace", "Forum basé sur l'espace"));
-        this.canalList.add(new Canal("technologie", "Forum basé sur la technologie"));
-        this.canalList.add(new Canal("people", "Forum basé sur les peoples"));
-        this.canalList.add(new Canal("automobile", "Forum basé sur l'automobile"));
-        this.canalList.add(new Canal("vacances", "Forum basé sur les vacances"));
-        this.canalList.add(new Canal("littérature", "Forum basé sur la littérature"));
-        this.canalList.add(new Canal("informatique", "Forum basé sur l'informatique"));
+        this.channelList.add(new Canal("science", "Forum basé sur la science"));
+        this.channelList.add(new Canal("nature", "Forum basé sur la nature"));
+        this.channelList.add(new Canal("espace", "Forum basé sur l'espace"));
+        this.channelList.add(new Canal("technologie", "Forum basé sur la technologie"));
+        this.channelList.add(new Canal("people", "Forum basé sur les peoples"));
+        this.channelList.add(new Canal("automobile", "Forum basé sur l'automobile"));
+        this.channelList.add(new Canal("vacances", "Forum basé sur les vacances"));
+        this.channelList.add(new Canal("littérature", "Forum basé sur la littérature"));
+        this.channelList.add(new Canal("informatique", "Forum basé sur l'informatique"));
 
         File f = new File(this.historicFolder);
         String[] pathnames = f.list();
         for (String pathname : pathnames) {
             if (!pathname.contains("-") && !this.canalContains(pathname)) {
-                this.canalList.add(new Canal(pathname, ""));
+                this.channelList.add(new Canal(pathname, ""));
             }
         }
     }
 
     private boolean canalContains(String pathname) {
-        for (Canal canal : this.canalList) {
+        for (Canal canal : this.channelList) {
             if (canal.getName().equals(pathname)) return true;
         }
         return false;
