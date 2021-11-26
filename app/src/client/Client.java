@@ -6,22 +6,52 @@ import client.stream.ClientThread;
 import java.io.*;
 import java.net.*;
 
+/**
+ * Client that manages the communication with the server.
+ */
 public class Client {
+	/**
+	 * Represents the chat.
+	 */
 	private Chat chat;
+	/**
+	 * Represents the client thread.
+	 */
 	private ClientThread clientThread;
+	/**
+	 * Represents the channel.
+	 */
 	private String channel;
+	/**
+	 * Represents the direct message.
+	 */
 	private String dm;
 
+	/**
+	 * Constructs the client.
+	 * @param chat : Chat.
+	 * @param hostName : Hostname of the server
+	 * @param portNumber : Port we connect to.
+	 * @throws IOException
+	 */
 	public Client(Chat chat, String hostName, int portNumber) throws IOException {
 		this.chat = chat;
 		Socket socket = new Socket(hostName, portNumber);
 		this.clientThread = new ClientThread(socket, this);
 	}
 
+	/**
+	 * Starts the client thread.
+	 */
 	public void start() {
 		this.clientThread.start();
 	}
 
+	/**
+	 * Executed when a reply arrives.
+	 * @param clientThread : Represents the client thread.
+	 * @param reply : Represents the reply.
+	 */
 	public void onServerReply(ClientThread clientThread, String reply) {
 		String[] args = reply.split(":");
 		String cmd = args[0];
@@ -69,24 +99,45 @@ public class Client {
 		}
 	}
 
+	/**
+	 * Executed when the client is connected to the server.
+	 * @param clientThread : Represents the client thread.
+	 */
 	public void onServerConnected(ClientThread clientThread) {
 	}
 
+	/**
+	 * Executed when the client is disconnected of the server.
+	 * @param clientThread : Represents the client thread.
+	 */
 	public void onServerDisconnected(ClientThread clientThread) {
 	}
 
+	/**
+	 * Gets the channels.
+	 */
 	private void getChannels() {
 		this.clientThread.echo("LISTER");
 	}
 
+	/**
+	 * Gets the online members.
+	 */
 	public void getMembers() {
 		this.clientThread.echo("MEMBRES");
 	}
 
+	/**
+	 * Gets the historic.
+	 */
 	public void getHistoric() {
 		this.clientThread.echo("HISTORIQUE");
 	}
 
+	/**
+	 * Displays the members.
+	 * @param reply : Represents the reply.
+	 */
 	private void displayMembers(String reply) {
 		this.chat.resetMembers();
 
@@ -97,6 +148,10 @@ public class Client {
 		}
 	}
 
+	/**
+	 * Displays the channels.
+	 * @param reply : Represents the reply.
+	 */
 	private void displayChannels(String reply) {
 		this.chat.resetChannels();
 
@@ -108,6 +163,10 @@ public class Client {
 		}
 	}
 
+	/**
+	 * Displays the message.
+	 * @param reply : Represents the reply.
+	 */
 	private void displayMessage(String reply) {
 		String[] data = reply.split(" ");
 		boolean isCannal = data[1].equals("CANNAL") ? true : false;
@@ -123,6 +182,10 @@ public class Client {
 		}
 	}
 
+	/**
+	 * Displays the historic.
+	 * @param reply : Represents the reply.
+	 */
 	private void displayHistoric(String reply) {
 		this.chat.clearHistoric();
 		reply = reply.substring(reply.indexOf(" ") + 1);
@@ -136,41 +199,73 @@ public class Client {
 		}
 	}
 
+	/**
+	 * Sends a message.
+	 * @param message : Message sent.
+	 */
 	public void sendMessage(String message) {
 		System.out.println(message);
 		this.clientThread.echo("MESSAGE " + message);
 	}
 
+	/**
+	 * Connects the user.
+	 * @param username : Username set.
+	 * @param password : Password set.
+	 */
 	public void connect(String username, String password) {
 		this.clientThread.echo("IDENTIFIER " + username + " " + password);
 	}
 
+	/**
+	 * Connects with a channel.
+	 * @param channel : Channel selected.
+	 */
 	public void selectChannel(String channel) {
 		this.clientThread.echo("SORTIR");
 		this.clientThread.echo("DECONNEXION");
 		this.clientThread.echo("REJOINDRE " + channel);
 	}
 
+	/**
+	 * Connects with a member.
+	 * @param member : Member selected.
+	 */
 	public void selectMember(String member) {
 		this.clientThread.echo("SORTIR");
 		this.clientThread.echo("DECONNEXION");
 		this.clientThread.echo("CONNEXION " + member);
 	}
 
+	/**
+	 * Sets the user.
+	 * @param reply : Represents the reply.
+	 */
 	private void setUser(String reply) {
 		this.chat.blockAuthenticate();
 		String user = reply.split(" ")[1];
 		this.chat.setUser(user);
 	}
 
+	/**
+	 * Sets the channel.
+	 * @param channel : Channel updated.
+	 */
 	public void setChannel(String channel) {
 		this.channel = channel;
 	}
 
+	/**
+	 * Sets the direct message.
+	 * @param dm : Direct message updated.
+	 */
 	public void setDm(String dm) {
 		this.dm = dm;
 	}
 
+	/**
+	 * Leaves the channel or direct message chat.
+	 */
 	public void leave() {
 		this.clientThread.echo("SORTIR");
 		this.clientThread.echo("DECONNEXION");

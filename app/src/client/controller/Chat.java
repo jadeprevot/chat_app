@@ -12,17 +12,26 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 /**
- * Implements the user interface
+ * Implements the user interface.
  */
 public class Chat implements ActionListener {
+	/**
+	 * Client accessing to the chat/
+	 */
 	private Client client;
+	/**
+	 * Window showing the interface.
+	 */
 	private Window window;
+	/**
+	 * User using the chat.
+	 */
 	private String user;
 
 	/**
-	 * Constructs a user interface
-	 * @param hostname : Hostname of the server
-	 * @param port : Port we connect to
+	 * Constructs a user interface.
+	 * @param hostname : Hostname of the server.
+	 * @param port : Port we connect to.
 	 * @throws IOException
 	 */
 	public Chat(String hostname, int port) throws IOException {
@@ -33,8 +42,8 @@ public class Chat implements ActionListener {
 	}
 
 	/**
-	 * Describes the actions we can do in the app
-	 * @param e : Action currently done
+	 * Describes the actions we can do in the app.
+	 * @param e : Action currently done.
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -91,9 +100,9 @@ public class Chat implements ActionListener {
 	}
 
 	/**
-	 * Displays the channels of the app
-	 * @param channel : Channel currently displayed
-	 * @param b : Tells if the channel is available or not
+	 * Displays the channels of the app.
+	 * @param channel : Channel currently displayed.
+	 * @param b : Tells if the channel is available or not.
 	 */
 	public void displayChannel(String channel, boolean b) {
 		this.window.getChannelPanel().addChannel(channel, b);
@@ -102,8 +111,8 @@ public class Chat implements ActionListener {
 	}
 
 	/**
-	 * Displays the members who are connected to the app
-	 * @param member : Member currently displayed
+	 * Displays the members who are connected to the app.
+	 * @param member : Member currently displayed.
 	 */
 	public void displayMember(String member) {
 		this.window.getMemberPanel().addMember(member, this.user);
@@ -112,11 +121,11 @@ public class Chat implements ActionListener {
 	}
 
 	/**
-	 * Displays the messages sent by the members in the chat
+	 * Displays the messages sent by the members in the chat.
 	 * @param isCannal : //TODO
 	 * @param name : //TODO
-	 * @param user : User who sent the message
-	 * @param message : Content of the message
+	 * @param user : User who sent the message.
+	 * @param message : Content of the message.
 	 */
 	public void displayMessage(boolean isCannal, String name, String user, String message) {
 		this.window.getDataPanel().addData("\n" + user+ ": " + message);
@@ -125,7 +134,7 @@ public class Chat implements ActionListener {
 	}
 
 	/**
-	 * Updates the list of members connected
+	 * Updates the list of members connected.
 	 */
 	public void resetMembers() {
 		this.window.getMemberPanel().getMenu().removeAll();
@@ -139,7 +148,7 @@ public class Chat implements ActionListener {
 	}
 
 	/**
-	 * Updates the list of channels available
+	 * Updates the list of channels available.
 	 */
 	public void resetChannels() {
 		this.window.getChannelPanel().getMenu().removeAll();
@@ -173,22 +182,22 @@ public class Chat implements ActionListener {
 	}
 
 	/**
-	 * Sets the user
-	 * @param user : User selected
+	 * Sets the user.
+	 * @param user : User updated.
 	 */
 	public void setUser(String user) {
 		this.user = user;
 	}
 
 	/**
-	 * Reinitializes the historic
+	 * Reinitializes the historic.
 	 */
 	public void clearHistoric() {
 		this.window.getDataPanel().getData().setText("");
 	}
 
 	/**
-	 * Notifies the user if they receive a message from another one
+	 * Notifies the user if they receive a message from another one.
 	 * @param name : The name of the sender.
 	 */
 	public void popup(String name) {
@@ -199,6 +208,11 @@ public class Chat implements ActionListener {
 		}
 	}
 
+	/**
+	 * Executes the chat process.
+	 * @param args : Command line arguments.
+	 * @throws IOException
+	 */
 	public static void main(String[] args) throws IOException {
 		if (args.length != 2) {
 			System.err.println("Usage: java Client <host name> <port number>");
