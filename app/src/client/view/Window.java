@@ -6,13 +6,35 @@ import client.view.*;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * Implements the window.
+ */
 public class Window extends JFrame {
+	/**
+	 * Connexion panel used by the window.
+	 */
 	private ConnexionPanel connexionPanel;
+	/**
+	 *  Data panel used by the window.
+	 */
 	private DataPanel dataPanel;
+	/**
+	 * Chat panel used by the window.
+	 */
 	private ChatPanel chatPanel;
+	/**
+	 * Channel panel used by the window.
+	 */
 	private ChannelPanel channelPanel;
+	/**
+	 * Member panel used by the window.
+	 */
 	private MemberPanel memberPanel;
 
+	/**
+	 * Constructs the window.
+	 * @param chat: Chat.
+	 */
 	public Window(Chat chat) {
 		this.setSize(new Dimension(800, 800));
 		this.setMinimumSize(new Dimension(500, 500));
@@ -46,22 +68,42 @@ public class Window extends JFrame {
 		this.setVisible(true);
 	}
 
+	/**
+	 * Gets the connexion panel.
+	 * @return : Returns the connexion panel.
+	 */
 	public ConnexionPanel getConnexionPanel() {
 		return this.connexionPanel;
 	}
 
+	/**
+	 *Gets the data panel.
+	 * @return : Returns the data panel.
+	 */
 	public DataPanel getDataPanel() {
 		return this.dataPanel;
 	}
 
+	/**
+	 * Gets the chat panel.
+	 * @return : Returns the chat panel.
+	 */
 	public ChatPanel getChatPanel() {
 		return this.chatPanel;
 	}
 
+	/**
+	 * Gets the channel panel.
+	 * @return : Returns the channel panel.
+	 */
 	public ChannelPanel getChannelPanel() {
 		return this.channelPanel;
 	}
 
+	/**
+	 * Gets the member panel.
+	 * @return : Returns the member panel.
+	 */
 	public MemberPanel getMemberPanel() {
 		return this.memberPanel;
 	}
