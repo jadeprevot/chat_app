@@ -42,7 +42,7 @@ public class ChatPanel extends JPanel {
 
 	/**
 	 * Gets the message.
-	 * @return: Returns the message.
+	 * @return : Returns the message.
 	 */
 	public JTextField getMessage() {
 		return this.message;

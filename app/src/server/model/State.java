@@ -13,7 +13,7 @@ public enum State {
 	 */
 	UNAUTHENTICATED,
 	/**
-	 * The client is connected to a canal.
+	 * The client is connected to a channel.
 	 */
 	CONNECTED_CANAL,
 	/**

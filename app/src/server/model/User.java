@@ -25,7 +25,7 @@ public class User {
 	/**
 	 * Canal in where the user is.
 	 */
-	private Canal canal;
+	private Canal channel;
 
 	/**
 	 * Constructs a user.
@@ -79,19 +79,19 @@ public class User {
 	}
 
 	/**
-	 * Return the canal where the user is.
-	 * @return The canal where the user is.
+	 * Return the channel where the user is.
+	 * @return The channel where the user is.
 	 */
 	public Canal getCanal() {
-		return this.canal;
+		return this.channel;
 	}
 
 	/**
-	 * Update the canal of the user.
-	 * @param canal The new canal of the user.
+	 * Update the channel of the user.
+	 * @param channel The new channel of the user.
 	 */
-	public void setCanal(Canal canal) {
-		this.canal = canal;
+	public void setCanal(Canal channel) {
+		this.channel = channel;
 	}
 
 	/**
@@ -104,6 +104,6 @@ public class User {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		User user = (User) o;
-		return Objects.equals(login, user.login) && Objects.equals(password, user.password) && Objects.equals(isAdmin, user.isAdmin) && state == user.state && Objects.equals(canal, user.canal);
+		return Objects.equals(login, user.login) && Objects.equals(password, user.password) && Objects.equals(isAdmin, user.isAdmin) && state == user.state && Objects.equals(channel, user.channel);
 	}
 }

@@ -23,9 +23,9 @@ public class Server {
      */
     private final List<ClientThread> clientThreadList;
     /**
-     * List of canals.
+     * List of channels.
      */
-    private final List<Canal> canalList;
+    private final List<Canal> channelList;
     /**
      * Indicates if the server is running or not.
      */
@@ -43,25 +43,25 @@ public class Server {
     public Server(Integer port) throws IOException {
         this.serverThread = new ServerThread(this, port);
         this.clientThreadList = new ArrayList<>();
-        this.canalList = new ArrayList<>();
+        this.channelList = new ArrayList<>();
         this.isRunning = Boolean.FALSE;
         this.historicFolder = "app/historic/";
         this.addCanals();
     }
 
     /**
-     * Add a canal to the list of cannals of the server.
+     * Add a channel to the list of cannals of the server.
      */
     private void addCanals() {
-        this.canalList.add(new Canal("science", "Forum basé sur la science"));
-        this.canalList.add(new Canal("nature", "Forum basé sur la nature"));
-        this.canalList.add(new Canal("espace", "Forum basé sur l'espace"));
-        this.canalList.add(new Canal("technologie", "Forum basé sur la technologie"));
-        this.canalList.add(new Canal("people", "Forum basé sur les peoples"));
-        this.canalList.add(new Canal("automobile", "Forum basé sur l'automobile"));
-        this.canalList.add(new Canal("vacances", "Forum basé sur les vacances"));
-        this.canalList.add(new Canal("littérature", "Forum basé sur la littérature"));
-        this.canalList.add(new Canal("informatique", "Forum basé sur l'informatique"));
+        this.channelList.add(new Canal("science", "Forum basé sur la science"));
+        this.channelList.add(new Canal("nature", "Forum basé sur la nature"));
+        this.channelList.add(new Canal("espace", "Forum basé sur l'espace"));
+        this.channelList.add(new Canal("technologie", "Forum basé sur la technologie"));
+        this.channelList.add(new Canal("people", "Forum basé sur les peoples"));
+        this.channelList.add(new Canal("automobile", "Forum basé sur l'automobile"));
+        this.channelList.add(new Canal("vacances", "Forum basé sur les vacances"));
+        this.channelList.add(new Canal("littérature", "Forum basé sur la littérature"));
+        this.channelList.add(new Canal("informatique", "Forum basé sur l'informatique"));
     }
 
     /**
@@ -121,8 +121,8 @@ public class Server {
             }
             case "REJOINDRE": {
                 try {
-                    String canalName = args[1];
-                    this.join(clientThread, canalName);
+                    String channelName = args[1];
+                    this.join(clientThread, channelName);
                 } catch (Exception e) {
                     clientThread.reply("-ERR_SYNTAXE");
                 }
@@ -181,11 +181,11 @@ public class Server {
         }
         else if (clientThread.getUser().getState() == State.CONNECTED_CANAL) {
             String user = clientThread.getUser().getLogin();
-            String canal = clientThread.getUser().getCanal().getName();
+            String channel = clientThread.getUser().getCanal().getName();
 
             String historic = "";
 
-            File file = new File(this.historicFolder + canal);
+            File file = new File(this.historicFolder + channel);
             if (file.exists()) {
                 try (BufferedReader br = new BufferedReader(new FileReader(file))) {
                     String line;
@@ -260,14 +260,14 @@ public class Server {
     }
 
     /**
-     * List the canals of the server.
+     * List the channels of the server.
      * @param clientThread A thread that manages a client connection.
      */
     private void list(ClientThread clientThread) {
         if (clientThread.getUser().getState() == State.AUTHENTICATED) {
             String reply = "+OK_LISTER: ";
-            for (Canal canal : this.canalList) {
-                reply += canal.getName() + "(" + canal.getTopic() + "), ";
+            for (Canal channel : this.channelList) {
+                reply += channel.getName() + "(" + channel.getTopic() + "), ";
             }
             reply = reply.substring(0, reply.length() - 2);
             clientThread.reply(reply);
@@ -278,26 +278,26 @@ public class Server {
     }
 
     /**
-     * Let a client to join a canal.
+     * Let a client to join a channel.
      * @param clientThread A thread that manages a client connection.
-     * @param canalName Name of the canal to join.
+     * @param channelName Name of the channel to join.
      */
-    private void join(ClientThread clientThread, String canalName) {
+    private void join(ClientThread clientThread, String channelName) {
         if (clientThread.getUser().getState() == State.AUTHENTICATED) {
-            for (Canal canal : this.canalList) {
-                if (canal.getName().equals(canalName)) {
-                    clientThread.join(canal);
+            for (Canal channel : this.channelList) {
+                if (channel.getName().equals(channelName)) {
+                    clientThread.join(channel);
                     User user = clientThread.getUser();
-                    canal.addUser(clientThread);
+                    channel.addUser(clientThread);
                     clientThread.reply("+OK_REJOINDRE: " + user.getCanal().getName());
                     return;
                 }
             }
-            Canal canal = new Canal(canalName, "");
-            this.canalList.add(canal);
-            clientThread.join(canal);
+            Canal channel = new Canal(channelName, "");
+            this.channelList.add(channel);
+            clientThread.join(channel);
             User user = clientThread.getUser();
-            canal.addUser(clientThread);
+            channel.addUser(clientThread);
             clientThread.reply("+OK_REJOINDRE: " + user.getCanal().getName());
         }
         else {
@@ -306,7 +306,7 @@ public class Server {
     }
 
     /**
-     * Let a client to leave a canal.
+     * Let a client to leave a channel.
      * @param clientThread A thread that manages a client connection.
      */
     private void leave(ClientThread clientThread) {
@@ -314,9 +314,9 @@ public class Server {
             String name = clientThread.getUser().getCanal().getName();
             clientThread.leave();
 
-            for (Canal canal : this.canalList) {
-                if (canal.getName().equals(name)) {
-                    canal.removeUser(clientThread);
+            for (Canal channel : this.channelList) {
+                if (channel.getName().equals(name)) {
+                    channel.removeUser(clientThread);
                     clientThread.reply("+OK_SORTIR: " + name);
                     return;
                 }
@@ -341,18 +341,18 @@ public class Server {
         }
         else if (clientThread.getUser().getState() == State.CONNECTED_CANAL) {
             User user = clientThread.getUser();
-            String canalName = user.getCanal().getName();
-            for (Canal canal : this.canalList) {
-                if (canal.getName().equals(canalName)) {
-                    for (ClientThread other : canal.getUserList()) {
+            String channelName = user.getCanal().getName();
+            for (Canal channel : this.channelList) {
+                if (channel.getName().equals(channelName)) {
+                    for (ClientThread other : channel.getUserList()) {
                         if (!clientThread.getUser().getLogin().equals(other.getUser().getLogin())) {
-                            other.message("NOTIFIER: CANNAL " + canalName + " PARLE: " + user.getLogin() + " << " + message + " >>");
+                            other.message("NOTIFIER: CANNAL " + channelName + " PARLE: " + user.getLogin() + " << " + message + " >>");
                         }
                     }
                 }
             }
-            clientThread.reply("+OK_MESSAGE: CANNAL " + canalName + " PARLE: " + user.getLogin() + " << " + message + " >>");
-            this.saveCanalMessage(user.getLogin(), canalName, message);
+            clientThread.reply("+OK_MESSAGE: CANNAL " + channelName + " PARLE: " + user.getLogin() + " << " + message + " >>");
+            this.saveCanalMessage(user.getLogin(), channelName, message);
         }
         else if (clientThread.getUser().getState() == State.CONNECTED_DIRECT) {
             ClientThread ct =  clientThread.getDirectMessage();
@@ -365,7 +365,7 @@ public class Server {
     }
 
     /**
-     * List the members of a canal or of the servers connected.
+     * List the members of a channel or of the servers connected.
      * @param clientThread A thread that manages a client connection.
      */
     private void members(ClientThread clientThread) {
@@ -382,12 +382,12 @@ public class Server {
         }
         else if (clientThread.getUser().getState() == State.CONNECTED_CANAL) {
             User user = clientThread.getUser();
-            String canalName = user.getCanal().getName();
+            String channelName = user.getCanal().getName();
 
-            for (Canal canal : this.canalList) {
-                if (canal.getName().equals(canalName)) {
+            for (Canal channel : this.channelList) {
+                if (channel.getName().equals(channelName)) {
                     String reply = "";
-                    for (ClientThread ct : canal.getUserList()) {
+                    for (ClientThread ct : channel.getUserList()) {
                         User other = ct.getUser();
                         reply += other.getLogin() + ", ";
                     }
@@ -475,13 +475,13 @@ public class Server {
     }
 
     /**
-     * Save the messages of canals.
+     * Save the messages of channels.
      * @param name Name of the message sender.
-     * @param canal Name of the message receiver.
+     * @param channel Name of the message receiver.
      * @param message Message to save.
      */
-    private void saveCanalMessage(String name, String canal, String message) {
-        String fileName = canal;
+    private void saveCanalMessage(String name, String channel, String message) {
+        String fileName = channel;
         PrintWriter printWriter = null;
         try {
             printWriter = new PrintWriter(new FileWriter(this.historicFolder + fileName, true));

@@ -110,16 +110,16 @@ public class ClientThread extends Thread {
     }
 
     /**
-     * Join a canal.
-     * @param canal Canal to be joined.
+     * Join a channel.
+     * @param channel Canal to be joined.
      */
-    public void join(Canal canal) {
-        this.user.setCanal(canal);
+    public void join(Canal channel) {
+        this.user.setCanal(channel);
         this.user.setState(CONNECTED_CANAL);
     }
 
     /**
-     * Leave a canal.
+     * Leave a channel.
      */
     public void leave() {
         this.user.setCanal(null);
